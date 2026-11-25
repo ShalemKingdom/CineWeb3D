@@ -20,7 +20,14 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
+      - name: Install distribution-signed Blender in sandbox
+        if: github.ref == 'refs/heads/sandbox'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends blender
+          blender --version
       - name: Download official Blender 4.5 LTS and verify upstream checksum
+        if: github.ref != 'refs/heads/sandbox'
         shell: bash
         run: |
           set -euo pipefail
