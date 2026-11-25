@@ -24,8 +24,9 @@ jobs:
         if: github.ref == 'refs/heads/sandbox'
         run: |
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends blender
+          sudo apt-get install -y --no-install-recommends blender python3-numpy
           blender --version
+          blender --background --factory-startup --python-exit-code 1 --python-expr 'import numpy; print(numpy.__version__)'
       - name: Download official Blender 4.5 LTS and verify upstream checksum
         if: github.ref != 'refs/heads/sandbox'
         shell: bash
