@@ -10,13 +10,20 @@ export function validIntegrity(value){
  if(typeof value!=='string')return false;
  return value.trim().split(/\s+/).some(token=>{const m=/^(sha256|sha384|sha512)-([A-Za-z0-9+/]+={0,2})$/.exec(token);if(!m)return false;const bytes=Buffer.from(m[2],'base64');return bytes.length===({sha256:32,sha384:48,sha512:64}[m[1]])&&bytes.toString('base64')===m[2];});
 }
+function registryVerified(p){return !!p&&!p.link&&!!p.version&&validIntegrity(p.integrity)&&/^https:\/\/registry\.npmjs\.org\//.test(p.resolved??'');}
+function bundledByVerifiedParent(path,p,packages){
+ if(p.inBundle!==true||p.link||!p.version||p.resolved||p.integrity)return false;
+ const split=path.lastIndexOf('/node_modules/');if(split<0)return false;
+ const parent=packages[path.slice(0,split)],name=path.slice(split+'/node_modules/'.length);
+ return registryVerified(parent)&&Array.isArray(parent.bundleDependencies)&&parent.bundleDependencies.includes(name)&&typeof parent.dependencies?.[name]==='string';
+}
 export function inspectLock(manifest,lock){
  const errors=[];const packages=lock?.packages;const top=packages?.[''];
  if(![2,3].includes(lock?.lockfileVersion)||!top)return {errors:['Missing npm lockfile packages or unsupported lockfile version'],inventory:[]};
  if(top.name!==manifest.name||top.version!==manifest.version)errors.push('Root name/version mismatch');
  for(const section of ['dependencies','devDependencies','optionalDependencies']){const a=manifest[section]??{},b=top[section]??{};for(const k of new Set([...Object.keys(a),...Object.keys(b)])){if(a[k]!==b[k])errors.push(`Lock mismatch: ${section}/${k}`);if(a[k]&& !packages[`node_modules/${k}`])errors.push(`Missing direct package: ${k}`);}}
  const inventory=[];
- for(const [path,p] of Object.entries(packages)){if(!path)continue;if(p.link||!p.version||!p.integrity||!validIntegrity(p.integrity)||!/^https:\/\/registry\.npmjs\.org\//.test(p.resolved??''))errors.push(`Unverified registry origin/integrity: ${path}`);const pathName=path.split('node_modules/').at(-1);const name=p.name??pathName;const blocked=n=>n.toLowerCase()==='gsap'||n.toLowerCase().startsWith('@gsap/');if(blocked(name)||blocked(pathName))errors.push(`Restricted dependency: ${name}`);if((name==='vite'||pathName==='vite')&&affectedVite(p.version))errors.push(`Vite requires patched release (GHSA-p4f5-76q4-ffq7): ${p.version}`);inventory.push({path,name,version:p.version??null,license:p.license??null,dev:p.dev===true,optional:p.optional===true,review:!p.license||!/^(MIT|Apache-2\.0|BSD-[23]-Clause|ISC|0BSD|Zlib)$/.test(p.license)});}
+ for(const [path,p] of Object.entries(packages)){if(!path)continue;if(!registryVerified(p)&&!bundledByVerifiedParent(path,p,packages))errors.push(`Unverified registry origin/integrity: ${path}`);const pathName=path.split('node_modules/').at(-1);const name=p.name??pathName;const blocked=n=>n.toLowerCase()==='gsap'||n.toLowerCase().startsWith('@gsap/');if(blocked(name)||blocked(pathName))errors.push(`Restricted dependency: ${name}`);if((name==='vite'||pathName==='vite')&&affectedVite(p.version))errors.push(`Vite requires patched release (GHSA-p4f5-76q4-ffq7): ${p.version}`);inventory.push({path,name,version:p.version??null,license:p.license??null,dev:p.dev===true,optional:p.optional===true,inBundle:p.inBundle===true,review:!p.license||!/^(MIT|Apache-2\.0|BSD-[23]-Clause|ISC|0BSD|Zlib)$/.test(p.license)});}
  return {errors,inventory};
 }
 export async function checkAll(base=root){const result=[];for(const project of projects){const folder=join(base,project);try{const manifest=await load(join(folder,'package.json'));const lock=await load(join(folder,'package-lock.json'));result.push({project,...inspectLock(manifest,lock)});}catch(e){result.push({project,errors:[e.code==='ENOENT'?'Missing package-lock.json or package.json':e.message],inventory:[]});}}return result;}

@@ -13,7 +13,7 @@ npm run build
 npm run preview
 npm run doctor
 ```
-Before release, follow [step 9 / release checklist](docs/optimization-step-9.md). Generate and review all three lockfiles; CI fails if missing. Optional Astro/Tailwind template: `npm --prefix templates/coffee-astro install` then `npm run dev:astro` or `npm run build:astro` (root install also required). Demo is noindex unless configured with an actual public domain and explicit opt-in. See [SEO & performance](docs/seo-performance.md).
+Before release, follow [step 9 / release checklist](docs/optimization-step-9.md). Generate and review all three lockfiles; CI fails if missing. Optional Astro/Tailwind template (Node 22.23.4+ for Astro 7): `npm --prefix templates/coffee-astro install` then `npm run dev:astro` or `npm run build:astro` (root install also required). Demo is noindex unless configured with an actual public domain and explicit opt-in. See [SEO & performance](docs/seo-performance.md).
 
 ## Status / Estado
 Experimental source: Three.js coffee scene, Anime.js, Lenis, timeline and video scroll helper retained; semantic HTML, SEO generator, responsive CSS, four visual modes, static SVG alternative, opt-in metrics and quality tooling added. The Astro template and browser tooling are configured but require installation and execution. Advanced modules remain optional or planned. No models or binaries included. GSAP not included.
