@@ -1,0 +1,1 @@
+import {defineConfig} from 'astro/config';import tailwind from '@tailwindcss/vite';import {fileURLToPath} from 'node:url';const root=fileURLToPath(new URL('../../',import.meta.url));export default defineConfig({output:'static',publicDir:fileURLToPath(new URL('../../public/',import.meta.url)),vite:{plugins:[tailwind()],server:{host:'127.0.0.1',cors:false,fs:{allow:[root]}}}});

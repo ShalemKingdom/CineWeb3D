@@ -1,0 +1,70 @@
+name: Sandbox dependency and release validation
+on:
+  push:
+    branches: [sandbox]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: sandbox-validation-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  validate:
+    if: github.ref == 'refs/heads/sandbox'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install FFmpeg for local tests
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - name: Generate lock candidates without lifecycle scripts
+        run: |
+          npm install --package-lock-only --ignore-scripts --no-audit
+          npm --prefix templates/coffee-astro install --package-lock-only --ignore-scripts --no-audit
+          npm --prefix tools/assets install --package-lock-only --ignore-scripts --no-audit
+          npm run release:check
+      - name: Audit all dependency graphs before installation
+        run: |
+          mkdir -p reports
+          status=0
+          npm audit --package-lock-only --audit-level=high --json > reports/audit-root.json || status=1
+          npm --prefix templates/coffee-astro audit --package-lock-only --audit-level=high --json > reports/audit-astro.json || status=1
+          npm --prefix tools/assets audit --package-lock-only --audit-level=high --json > reports/audit-assets.json || status=1
+          exit "$status"
+      - name: Install locked dependencies
+        run: |
+          npm ci --no-audit
+          npm --prefix templates/coffee-astro ci --no-audit
+          npm --prefix tools/assets ci --no-audit
+      - name: Record available updates
+        run: |
+          npm outdated --json > reports/outdated-root.json || test "$?" = 1
+          npm --prefix templates/coffee-astro outdated --json > reports/outdated-astro.json || test "$?" = 1
+          npm --prefix tools/assets outdated --json > reports/outdated-assets.json || test "$?" = 1
+      - run: npm run validate:local
+      - run: npm run build
+      - run: npm run build:astro
+      - run: npm run diagnostics:assets -- dist --strict
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+      - name: Lighthouse preview (noindex intentional)
+        env:
+          CHROME_PATH: /usr/bin/google-chrome
+        run: npm run quality
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sandbox-validation-evidence
+          path: |
+            package-lock.json
+            templates/coffee-astro/package-lock.json
+            tools/assets/package-lock.json
+            reports/
+            test-results/
+            .lighthouseci/
+          retention-days: 7

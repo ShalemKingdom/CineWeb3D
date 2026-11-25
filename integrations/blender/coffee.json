@@ -1,0 +1,13 @@
+{
+  "name": "coffee",
+  "ceramic": "#E9D5B5",
+  "coffee": "#49230F",
+  "background": "#20160F",
+  "segments": 48,
+  "duration": 4,
+  "fps": 24,
+  "resolution": [960, 540],
+  "camera_radius": 6.5,
+  "camera_height": 2.6,
+  "rotation_degrees": 360
+}

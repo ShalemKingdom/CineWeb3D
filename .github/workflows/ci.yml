@@ -1,0 +1,44 @@
+name: Build and quality
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install FFmpeg for required media tests
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - name: Local checks (no npm dependencies)
+        run: npm run validate:local
+      - name: Require reviewed lockfiles
+        run: npm run release:check
+      - run: npm ci
+      - run: npm audit --audit-level=high
+      - run: npm --prefix templates/coffee-astro ci
+      - run: npm --prefix templates/coffee-astro audit --audit-level=high
+      - run: npm --prefix tools/assets ci
+      - run: npm --prefix tools/assets audit --audit-level=high
+      - run: npm run build
+      - run: npm run diagnostics:assets -- dist --strict
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+      - name: Lighthouse (local reports)
+        env:
+          CHROME_PATH: /usr/bin/google-chrome
+        run: npm run quality
+      - name: Astro template
+        run: npm run build:astro
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: quality-reports
+          path: |
+            reports/
+            test-results/

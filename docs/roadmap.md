@@ -1,0 +1,21 @@
+# Roadmap / Plan
+- v0.3.0: permissive animation core.
+- v0.4.0: SEO, performance, accessibility, quality gates, Astro template (experimental).
+- v0.5.0: optional Blender Bridge (experimental; real Blender validation pending).
+- v0.5.x: remaining cinematic effects, physics and cameras.
+- v0.6.0-alpha.1: demand-driven scroll and latest-target video seeking (logic tests pass; browser validation pending).
+- v0.6.0-alpha.2: adaptive rendering and frame budgets (logic tests pass; real GPU/browser checks pending).
+- v0.6.0-alpha.3: optional Smart Asset Engine, GLB compression/validation and publish gate (unit tests; real codec/browser checks pending).
+- v0.6.0-alpha.4: Smart Video Engine, verified local FFmpeg profiles, poster and keyframe spacing; browser pending.
+- v0.6.0-alpha.5: bounded public asset cache, progressive loading, intent prefetch; browser/deployment pending.
+- v0.6.0-alpha.6: opt-in diagnostics, asset budget audit, local reports; browser checks pending.
+- v0.6.0-alpha.7: Smart Component Engine, two commercial concept templates, three themes, static generation; browser checks pending.
+- v0.6.0-alpha.8: optional AI Multimedia Engine, local Wan/ComfyUI adapters and Blender/user media pipeline; real AI generation pending.
+- v0.6.0-alpha.9: integral validation, strict lockfile/security gates, SEO integration tests; 145 tests pass locally, stable release blocked.
+- v0.6.0: stable only after reproducible lockfiles, builds, browser, GPU, security and license gates.
+- v0.7.0: commercial templates and conversion adapters.
+- v0.8.0: AI Director and agent workflows.
+- v0.9.0: CLI and advanced optimization.
+- v0.10.0: experimental visual Studio.
+- v1.0.0: stable only after security, licenses, accessibility and device checks.
+See docs/architecture.md. No npm package published.

@@ -1,0 +1,1 @@
+import {buildSeo,robotsText} from '../../../../src/modules/seo.js';export function GET(){return new Response(robotsText(buildSeo({siteUrl:process.env.SITE_URL,indexable:process.env.SITE_INDEXABLE==='true'})),{headers:{'Content-Type':'text/plain'}});}

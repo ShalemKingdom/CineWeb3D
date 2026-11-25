@@ -1,0 +1,5 @@
+import {renderBudget} from './smart-render.js';
+export const modes=['auto','cinematic','balanced','lite','accessible'];
+export function chooseMode({requested='auto',reduced=false,saveData=false,webgl=true,width=1024,memory,cores}={}){if(reduced||!webgl||requested==='accessible')return 'accessible';if(saveData||requested==='lite')return 'lite';if(requested==='cinematic'||requested==='balanced')return requested;if((memory&&memory<=2)||(cores&&cores<=2))return 'lite';if(width<1024||(memory&&memory<=4)||(cores&&cores<=4))return 'balanced';return 'cinematic';}
+export function budget(mode){return ['cinematic','balanced','economy'].includes(mode)?renderBudget(mode):{pixelRatio:1,particles:0,segments:mode==='lite'?24:0};}
+export function detectMode(requested='auto'){let webgl=false;try{const c=document.createElement('canvas');const gl=c.getContext('webgl2');webgl=Boolean(gl);gl?.getExtension('WEBGL_lose_context')?.loseContext();}catch{}return chooseMode({requested,reduced:matchMedia('(prefers-reduced-motion: reduce)').matches,saveData:navigator.connection?.saveData,webgl,width:innerWidth,memory:navigator.deviceMemory,cores:navigator.hardwareConcurrency});}

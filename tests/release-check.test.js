@@ -1,0 +1,14 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';import {inspectLock,checkAll,affectedVite} from '../scripts/release-check.mjs';
+const manifest={name:'sample',version:'1.0.0',dependencies:{three:'^1.0.0'}};
+const fixture=()=>({lockfileVersion:3,packages:{'':{...manifest},'node_modules/three':{version:'1.0.0',integrity:'sha512-'+Buffer.alloc(64).toString('base64'),resolved:'https://registry.npmjs.org/three/-/three-1.0.0.tgz',license:'MIT'}}});
+test('release lock inventory accepts a matching registry tree',()=>{const r=inspectLock(manifest,fixture());assert.deepEqual(r.errors,[]);assert.equal(r.inventory[0].review,false);});
+test('release lock detects stale dependency spec',()=>{const l=fixture();l.packages['']={...manifest,dependencies:{three:'^2.0.0'}};assert.match(inspectLock(manifest,l).errors.join(),/Lock mismatch/);});
+test('release lock rejects nonregistry or missing integrity',()=>{const l=fixture();l.packages['node_modules/three'].resolved='https://example.org/three.tgz';delete l.packages['node_modules/three'].integrity;assert.match(inspectLock(manifest,l).errors.join(),/Unverified/);});
+test('release lock rejects restricted animation engine',()=>{const l=fixture();l.packages['node_modules/gsap']={...l.packages['node_modules/three']};assert.match(inspectLock(manifest,l).errors.join(),/Restricted/);});
+test('release inventory flags nontrivial or absent licenses for review',()=>{const l=fixture();l.packages['node_modules/three'].license='GPL-3.0-only';assert.equal(inspectLock(manifest,l).inventory[0].review,true);delete l.packages['node_modules/three'].license;assert.equal(inspectLock(manifest,l).inventory[0].review,true);});
+test('release preflight fails closed if locks unavailable',async()=>{const r=await checkAll('/nonexistent-cineweb3d-release-test');assert.equal(r.length,3);assert.ok(r.every(x=>x.errors.length));});
+
+test("Vite advisory gate covers root and transitive versions",()=>{for(const v of ["4.5.0","5.4.99","6.4.5","7.3.7","8.1.6","8.2.4","8.3.6"])assert.equal(affectedVite(v),true,v);for(const v of ["6.4.6","7.3.8","8.1.7","8.2.5","8.3.7"])assert.equal(affectedVite(v),false,v);const l=fixture();l.packages["node_modules/astro/node_modules/vite"]={...l.packages["node_modules/three"],version:"6.4.5"};assert.match(inspectLock(manifest,l).errors.join(),/Vite requires patched/);});
+
+test('release gate rejects malformed or truncated integrity digests',()=>{const l=fixture();l.packages['node_modules/three'].integrity='sha512-example';assert.match(inspectLock(manifest,l).errors.join(),/Unverified/);});
+test('release gate rejects GSAP by installed path and aliased package name',()=>{const l=fixture();l.packages['node_modules/gsap']={...l.packages['node_modules/three'],name:'other'};l.packages['node_modules/alias']={...l.packages['node_modules/three'],name:'gsap'};assert.equal(inspectLock(manifest,l).errors.filter(e=>e.includes('Restricted dependency')).length,2);});

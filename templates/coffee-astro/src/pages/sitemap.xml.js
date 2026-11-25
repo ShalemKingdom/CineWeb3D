@@ -1,0 +1,1 @@
+import {buildSeo,sitemapXml} from '../../../../src/modules/seo.js';export function GET(){const seo=buildSeo({siteUrl:process.env.SITE_URL,indexable:process.env.SITE_INDEXABLE==='true'});return new Response(sitemapXml(seo.robots==='index,follow'?[seo.canonical]:[]),{headers:{'Content-Type':'application/xml'}});}

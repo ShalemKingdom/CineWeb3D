@@ -1,0 +1,50 @@
+name: Blender Bridge smoke (manual)
+on: workflow_dispatch
+permissions:
+  contents: read
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Download official Blender 4.5 LTS and verify upstream checksum
+        shell: bash
+        run: |
+          set -euo pipefail
+          version=4.5.16
+          archive="blender-$version-linux-x64.tar.xz"
+          base=https://download.blender.org/release/Blender4.5
+          cd "$RUNNER_TEMP"
+          curl --fail --location --retry 3 "$base/$archive" -o "$archive"
+          curl --fail --location --retry 3 "$base/blender-$version.sha256" -o checksums.txt
+          awk -v name="$archive" '$2 == name || $2 == "*" name { print $1 "  " name }' checksums.txt > selected.sha256
+          test -s selected.sha256
+          sha256sum --check selected.sha256
+          tar -xf "$archive"
+          echo "$RUNNER_TEMP/blender-$version-linux-x64" >> "$GITHUB_PATH"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm run release:check
+      - run: npm --prefix tools/assets ci
+      - name: Test real scene export
+        run: |
+          blender --version
+          python3 scripts/blender_bridge.py --output generated/blender/smoke
+          npm run assets:optimize -- generated/blender/smoke/scene.glb generated/blender/smoke/web.glb
+          npm run blender:publish -- generated/blender/smoke/web.glb
+      - name: Build and check imported model in Chromium
+        env:
+          CINEWEB3D_ASSET_SMOKE: "1"
+        run: |
+          npm ci
+          npm run build
+          npx playwright install --with-deps chromium
+          npm run test:e2e -- --grep "optimized Blender model"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: blender-smoke
+          path: generated/blender/smoke/
