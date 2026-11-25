@@ -1,5 +1,15 @@
-name: Blender Bridge smoke (manual)
-on: workflow_dispatch
+name: Blender Bridge smoke
+on:
+  workflow_dispatch:
+  push:
+    branches: [sandbox]
+    paths:
+      - '.github/workflows/blender-smoke.yml'
+      - 'integrations/blender/**'
+      - 'scripts/blender_bridge.py'
+      - 'scripts/smart-assets.mjs'
+      - 'tools/assets/package*.json'
+      - 'package*.json' 
 permissions:
   contents: read
 jobs:
@@ -14,7 +24,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          version=4.5.16
+          version=4.5.17
           archive="blender-$version-linux-x64.tar.xz"
           base=https://download.blender.org/release/Blender4.5
           cd "$RUNNER_TEMP"
@@ -28,8 +38,16 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - name: Resolve lock candidates for sandbox if missing
+        if: github.ref == 'refs/heads/sandbox'
+        run: |
+          npm install --package-lock-only --ignore-scripts --no-audit
+          npm --prefix templates/coffee-astro install --package-lock-only --ignore-scripts --no-audit
+          npm --prefix tools/assets install --package-lock-only --ignore-scripts --no-audit
       - run: npm run release:check
-      - run: npm --prefix tools/assets ci
+      - run: npm audit --package-lock-only --audit-level=high
+      - run: npm --prefix tools/assets audit --package-lock-only --audit-level=moderate
+      - run: npm --prefix tools/assets ci --no-audit
       - name: Test real scene export
         run: |
           blender --version
@@ -45,6 +63,7 @@ jobs:
           npx playwright install --with-deps chromium
           npm run test:e2e -- --grep "optimized Blender model"
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: blender-smoke
           path: generated/blender/smoke/

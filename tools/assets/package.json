@@ -1,1 +1,18 @@
-{"name":"cineweb3d-asset-tools","version":"0.6.0-alpha.3","private":true,"type":"module","dependencies":{"@gltf-transform/cli":"4.5.1","gltf-validator":"2.0.0-dev.3.10"},"engines":{"node":">=22.12.0"}}
+{
+  "name": "cineweb3d-asset-tools",
+  "version": "0.6.0-alpha.3",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@gltf-transform/cli": "4.5.1",
+    "gltf-validator": "2.0.0-dev.3.10"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "overrides": {
+    "@donmccurdy/caporal": {
+      "glob": "^14.0.2"
+    }
+  }
+}
