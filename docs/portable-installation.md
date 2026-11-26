@@ -137,3 +137,5 @@ NEXT_TELEMETRY_DISABLED=1 npx next start --hostname 127.0.0.1 --port 4185
 ```
 
 In a second terminal at the checkout root, run `CINE_NEXT_URL=http://127.0.0.1:4185/ node scripts/test-next-glb.mjs`. It checks a real Draco decode, procedural request isolation, navigation, observed WebGL buffer deletion, decoder failure fallback and unmount during an in-flight decoder request. Repeat with `next build --webpack` after stopping the server. Chromium and Playwright must be installed separately. This is a local lab check; physical devices and other GLB extensions remain separate tests.
+
+These unpublished experiments currently reuse version `0.6.0-alpha.9` while contents change. Do not treat that version as an immutable release. When retesting a replaced local tarball, verify its integrity, reinstall it and clear only the fixture's generated Next build cache before comparing results. A future release must assign a new version to changed contents and regenerate its locks and attestations.
