@@ -42,7 +42,11 @@
     "director:plan": "node scripts/director-plan.mjs",
     "director:check": "node scripts/check-skill.mjs",
     "setup": "node scripts/setup.mjs",
-    "community:check": "node scripts/check-community.mjs"
+    "community:check": "node scripts/check-community.mjs",
+    "workspaces:check": "node scripts/workspace-check.mjs",
+    "workspaces:test": "node --test tests/workspaces.test.js",
+    "workspaces:install": "npm ci --prefix distribution --ignore-scripts",
+    "workspaces:consumer": "node scripts/test-workspace-consumer.mjs"
   },
   "dependencies": {
     "animejs": "^4.2.0",

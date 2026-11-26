@@ -53,3 +53,7 @@ Dependency-free static renderer and presets generate two original commercial dem
 
 ## AI Multimedia Engine (alpha.8)
 Optional Python orchestration (no runtime dependency): plan → selected trusted local source (Wan TI2V-5B, ComfyUI API workflow, Blender frames or user assets) → FFmpeg optimization → local receipt → manual publication. AI Director instructions included. No bundled weights, no live AI verification yet. See optimization-step-8.md.
+
+## Step 14.4: private modular packages
+
+The npm workspace root is `distribution/`: `@cineweb3d/core` contains the browser runtime, `@cineweb3d/cli` provides the `cineweb3d` executable, `@cineweb3d/skill` contains the `$cineweb3d` agent skill, `@cineweb3d/templates` supplies the Aurora scaffold, and `@cineweb3d/tools` supplies integrity tooling. CLI depends on skill and templates; templates depends on core. Internal versions are pinned to `0.6.0-alpha.9`; all five packages are private and unpublished. Runtime and skill package copies are checked against their reviewed repository sources. Other repository tools remain separate and are not represented as bundled package functionality. See [portable installation](portable-installation.md#private-modular-workspaces) for local installation, checks, and limitations.

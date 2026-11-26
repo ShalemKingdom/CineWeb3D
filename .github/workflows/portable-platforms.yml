@@ -1,7 +1,7 @@
 name: Portable installer platform checks
 on:
   push:
-    branches: ['sandbox-distribution-*']
+    branches: ['sandbox-distribution-*', 'dev/14-4-modular-architecture']
   pull_request:
     paths:
       - 'packages/portable/**'

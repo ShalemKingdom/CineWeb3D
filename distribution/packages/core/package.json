@@ -13,7 +13,8 @@
     "./style.css": "./src/style.css",
     "./grounds.css": "./src/grounds.css",
     "./modules/*": "./src/modules/*",
-    "./controller": "./src/modules/bootstrap-controller.js"
+    "./controller": "./src/modules/bootstrap-controller.js",
+    "./package.json": "./package.json"
   },
   "dependencies": {
     "three": "0.181.2",
