@@ -63,3 +63,5 @@ For that fixture only, the Next `webpack` configuration appended `{resourceQuery
 ### Recover an interrupted skill update
 
 If an update stopped after saving its managed backup but before restoring the target, use `npx cineweb3d skill-recover` (or pass `--skill-root /absolute/path`). Recovery requires the destination to be absent and exactly one `.cineweb3d-backup-<pid>` directory with a valid, unchanged installer receipt. It refuses edited, ambiguous or unowned backups and never replaces an existing destination. Review any remaining stage directories manually. This does not yet provide automatic recovery from every interruption or protect against concurrent hostile filesystem changes.
+
+The local upgrade test defaults to npm offline mode. On a clean CI runner, `CINE_ALLOW_NETWORK=1 npm run test:upgrade` allows npm to retrieve registry metadata for pinned third-party dependencies; the CineWeb3D versions under test remain local synthetic tarballs and installation uses `--ignore-scripts`.

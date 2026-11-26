@@ -37,6 +37,8 @@ jobs:
       - run: npm ci --prefix distribution --ignore-scripts
       - run: node --test tests/portable.test.js tests/portable-integrity.test.js tests/workspaces.test.js
       - run: npm run test:upgrade
+        env:
+          CINE_ALLOW_NETWORK: '1'
       - run: node scripts/package-portable.mjs
       - run: npm pack ./reports/portable/package --pack-destination ./reports/portable --ignore-scripts
       - run: node scripts/portable-integrity.mjs create reports/portable/cineweb3d-runtime-0.6.0-alpha.9.tgz reports/portable/checksums.json
