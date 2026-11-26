@@ -25,3 +25,5 @@ Optimization step 7: read docs/optimization-step-7.md. Use the shared commercial
 Optimization step 8: read docs/optimization-step-8.md and docs/ai-director-multimedia.md. Use multimedia:check, select an explicitly approved local backend, run plan before --execute, and require --trust-local for Wan/ComfyUI/Blender. Never auto-install weights, use paid partner nodes, or publish generated resources without review. Report real FFmpeg results separately from simulated connectors; actual GPU generation remains unverified.
 
 Optimization step 9: read docs/optimization-step-9.md. Generate/review all three lockfiles, run release:check and npm ci; never bypass CI or publish stable with blocked checks. Review exact licenses and npm audit; preserve noindex preview and do not claim real browser/GPU performance without evidence.
+
+Step 10: read docs/security-license-shield.md. Run security:check and strict security:stable before stable releases. Do not bypass blocked licenses, audit failures, or integrity checks. Preserve original license evidence and review final bundle and decoder notices; no redistribution of restricted development tooling.

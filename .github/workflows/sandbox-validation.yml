@@ -14,27 +14,23 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           persist-credentials: false
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 22
       - name: Install FFmpeg for local tests
         run: sudo apt-get update && sudo apt-get install -y ffmpeg
-      - name: Generate lock candidates without lifecycle scripts
-        run: |
-          npm install --package-lock-only --ignore-scripts --no-audit
-          npm --prefix templates/coffee-astro install --package-lock-only --ignore-scripts --no-audit
-          npm --prefix tools/assets install --package-lock-only --ignore-scripts --no-audit
-          npm run release:check
+      - name: Verify committed lockfiles without mutation
+        run: npm run release:check
       - name: Audit all dependency graphs before installation
         run: |
           mkdir -p reports
           status=0
-          npm audit --package-lock-only --audit-level=high --json > reports/audit-root.json || status=1
-          npm --prefix templates/coffee-astro audit --package-lock-only --audit-level=high --json > reports/audit-astro.json || status=1
-          npm --prefix tools/assets audit --package-lock-only --audit-level=high --json > reports/audit-assets.json || status=1
+          npm audit --package-lock-only --audit-level=low --json > reports/audit-root.json || status=1
+          npm --prefix templates/coffee-astro audit --package-lock-only --audit-level=low --json > reports/audit-astro.json || status=1
+          npm --prefix tools/assets audit --package-lock-only --audit-level=low --json > reports/audit-assets.json || status=1
           exit "$status"
       - name: Install locked dependencies
         run: |
@@ -56,7 +52,7 @@ jobs:
         env:
           CHROME_PATH: /usr/bin/google-chrome
         run: npm run quality
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
           name: sandbox-validation-evidence

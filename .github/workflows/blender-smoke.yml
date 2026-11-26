@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           persist-credentials: false
       - name: Install distribution-signed Blender in sandbox
@@ -43,18 +43,12 @@ jobs:
           sha256sum --check selected.sha256
           tar -xf "$archive"
           echo "$RUNNER_TEMP/blender-$version-linux-x64" >> "$GITHUB_PATH"
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 22
-      - name: Resolve lock candidates for sandbox if missing
-        if: github.ref == 'refs/heads/sandbox'
-        run: |
-          npm install --package-lock-only --ignore-scripts --no-audit
-          npm --prefix templates/coffee-astro install --package-lock-only --ignore-scripts --no-audit
-          npm --prefix tools/assets install --package-lock-only --ignore-scripts --no-audit
       - run: npm run release:check
-      - run: npm audit --package-lock-only --audit-level=high
-      - run: npm --prefix tools/assets audit --package-lock-only --audit-level=moderate
+      - run: npm audit --package-lock-only --audit-level=low
+      - run: npm --prefix tools/assets audit --package-lock-only --audit-level=low
       - run: npm --prefix tools/assets ci --no-audit
       - name: Test real scene export
         run: |
@@ -70,7 +64,7 @@ jobs:
           npm run build
           npx playwright install --with-deps chromium
           npm run test:e2e -- --grep "optimized Blender model"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
           name: blender-smoke
