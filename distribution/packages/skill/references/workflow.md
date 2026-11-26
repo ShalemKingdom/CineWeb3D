@@ -1,6 +1,6 @@
 # Route-specific workflow
 
-Start: inspect the host project, its AGENTS.md, package.json, and installed runtime version. Skill files alone do not contain the engine. The experimental @cineweb3d/runtime package offers browser modules and a scaffold; the repository-only documentation and advanced toolchain below require a compatible checkout. Do not assume they are installed.
+Start: inspect the host project, its AGENTS.md, package.json, and installed runtime version. Skill files alone do not contain the engine. The experimental @cineweb3d/core, @cineweb3d/cli and @cineweb3d/templates packages offer browser modules and a scaffold; the repository-only documentation and advanced toolchain below require a compatible checkout. Do not assume they are installed.
 
 | Route | Read in repository | Implementation |
 |---|---|---|

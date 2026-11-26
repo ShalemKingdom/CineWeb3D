@@ -39,3 +39,23 @@ Run `node scripts/workspace-check.mjs`, `npm audit --prefix distribution --packa
 The provenance workflow creates checksums, SBOMs, and requests GitHub's signed build attestations for the five tarballs. Verify an artifact with `gh attestation verify ARTIFACT --repo ShalemKingdom/CineWeb3D` after obtaining it and its attestation from GitHub. A configured workflow is not evidence of a successful or verified attestation; inspect the actual run. CycloneDX SBOMs include development dependencies as enumerated by npm on the runner; compare against lockfiles for platform-specific optional packages. Existing Vite demonstration works from the local package. Secure Astro/Next adapters and full application integration are not implemented.
 
 `node scripts/check-sbom-coverage.mjs` compares CycloneDX component references with every versioned entry in the four lockfiles, including development and optional dependencies. Duplicate lock paths may represent the same component. This coverage check is not a validation of external tools, operating-system packages, media rights or dependency relationships.
+
+### Framework lifecycle evidence
+
+For a client-routed page, `@cineweb3d/core/controller` exports `mountExperience()`, returning an idempotent cleanup function. Invoke it after the page DOM exists and call cleanup when it unmounts. A local Next.js 16.4.6 App Router fixture using webpack and this cleanup compiled and restored the 3D scene after client navigation away and back. The fixture required a webpack `resourceQuery: /url/` asset rule for the optional local Draco decoders. The default Turbopack build failed on those Vite-style decoder imports; it is not supported by this experiment. The fixture is not a general installer or proof of optional GLB decoder compatibility in Next.
+
+A separate Astro 7.4.13 static page using the local core tarball compiled and its desktop/mobile browser smoke checks passed; dynamic view transitions and automatic integration into existing projects remain unverified. Vite standalone tarball use has also been tested. No framework configuration or application files are modified automatically.
+
+Example client lifecycle for the tested Next webpack fixture (the page must supply the documented `#scene`, `#scene-poster`, `#quality` and `#quality-status` elements):
+
+```jsx
+'use client';
+import {useEffect} from 'react';
+import {mountExperience} from '@cineweb3d/core/controller';
+export function SceneLifecycle() {
+  useEffect(() => mountExperience(), []);
+  return null;
+}
+```
+
+For that fixture only, the Next `webpack` configuration appended `{resourceQuery: /url/, type: 'asset/resource'}` to `config.module.rules` and the build used `next build --webpack`. Review existing rules before adopting this: an overly broad rule can change other assets. Avoid auto-editing a project's Next config; validate its own build, decoder paths, client navigation and cleanup.

@@ -4,7 +4,7 @@ description: Create, customize, audit and optimize cinematic commercial 3D websi
 ---
 # CineWeb3D — AI Skill Engineering
 
-Work in the user’s project and read its AGENTS.md first. The experimental @cineweb3d/runtime tarball supplies the browser runtime and CLI without a checkout; confirm the installed version and user scope. For advanced repository-only planners, validators or asset tooling, use a compatible CineWeb3D checkout and verify its branch and working tree. Do not overwrite existing work, change other repositories, merge, publish, or install heavy tools/models without authorization. The engine is experimental; this skill is a workflow, not a hosted AI service.
+Work in the user’s project and read its AGENTS.md first. The private experimental @cineweb3d/core and @cineweb3d/cli packages provide the browser runtime and CLI without a checkout; a legacy combined @cineweb3d/runtime tarball also exists. Confirm the installed versions and user scope. For advanced repository-only planners, validators or asset tooling, use a compatible CineWeb3D checkout and verify its branch and working tree. Do not overwrite existing work, change other repositories, merge, publish, or install heavy tools/models without authorization. The engine is experimental; this skill is a workflow, not a hosted AI service.
 
 ## 1. Brief and decision
 
@@ -23,7 +23,7 @@ Read [workflow](references/workflow.md) for the selected route only. Use semanti
 - Video: use existing Smart Video Engine with approved silent decorative media, manual load and static fallback.
 - Optional local AI/Blender: first inspect hardware and plan; require explicit approval before execution, tool installation or weights. Do not pretend mocked tests are real AI output.
 
-Preserve demand-driven scroll/rendering, mobile intent gating, reduced motion, data saving, accessible controls and cleanup. No GSAP/ScrollTrigger, FSL, compulsory paid APIs, CDN or telemetry by default. Never bypass security/notice gates. Keep optional dependencies isolated.
+For client-side routed apps, mount the explicit @cineweb3d/core/controller and call its cleanup on unmount. Next.js Turbopack does not currently support the optional decoder imports; a tested webpack fixture is experimental, not a general-purpose adapter. Preserve demand-driven scroll/rendering, mobile intent gating, reduced motion, data saving, accessible controls and cleanup. No GSAP/ScrollTrigger, FSL, compulsory paid APIs, CDN or telemetry by default. Never bypass security/notice gates. Keep optional dependencies isolated.
 
 ## 3. Verify
 
