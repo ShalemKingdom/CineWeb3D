@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npm run components:check && vite build && node scripts/build-seo.mjs",
+    "build": "npm run components:check && vite build && node scripts/build-seo.mjs && node scripts/distribution-notices.mjs vite",
     "preview": "vite preview",
     "media:check": "python3 scripts/check_media.py",
     "test": "node --test tests/*.test.js",
@@ -14,7 +14,7 @@
     "quality": "lhci autorun",
     "images:optimize": "node scripts/optimize-images.mjs",
     "dev:astro": "npm --prefix templates/coffee-astro run dev",
-    "build:astro": "npm --prefix templates/coffee-astro run build",
+    "build:astro": "npm --prefix templates/coffee-astro run build && node scripts/distribution-notices.mjs astro",
     "blender:check": "python3 scripts/blender_bridge.py --dry-run",
     "blender:build": "python3 scripts/blender_bridge.py",
     "blender:publish": "node scripts/smart-assets.mjs publish",

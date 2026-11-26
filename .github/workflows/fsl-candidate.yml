@@ -1,0 +1,53 @@
+name: FSL-free Lighthouse candidate
+on:
+  push:
+    branches: [sandbox]
+    paths:
+      - '.github/workflows/fsl-candidate.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  candidate:
+    if: github.ref == 'refs/heads/sandbox'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+      - name: Resolve official Lighthouse 13.5.0 candidate
+        run: |
+          mkdir -p reports/fsl-candidate
+          npm view lighthouse dist-tags --json > reports/fsl-candidate/dist-tags.json
+          npm pkg set 'overrides.lighthouse=13.5.0'
+          npm install --package-lock-only --ignore-scripts --no-audit
+          npm run security:stable
+      - name: Audit candidate before executing dependencies
+        run: |
+          npm audit --package-lock-only --audit-level=low --json > reports/fsl-candidate/audit.json
+          npm ci --no-audit
+          npm --prefix templates/coffee-astro ci --no-audit
+          npm --prefix tools/assets ci --no-audit
+          npm run security:stable -- --installed
+      - name: Build and test performance tool compatibility
+        env:
+          CHROME_PATH: /usr/bin/google-chrome
+        run: |
+          npm run build
+          npm run build:astro
+          npm run quality
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: fsl-candidate-evidence
+          path: |
+            package.json
+            package-lock.json
+            reports/
+            dist/licenses/
+            templates/coffee-astro/dist/licenses/
+          retention-days: 7
