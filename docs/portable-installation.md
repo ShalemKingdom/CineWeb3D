@@ -1,5 +1,15 @@
 # Experimental portability: local sandbox distribution
 
+## Step 14.4.3 partial validation (2026-11-26)
+
+At source commit `9e75f14aabf0889677f1b66eb116035dd4354db6`, `node scripts/workspace-check.mjs` reported no errors and the distribution lockfile audit reported zero vulnerabilities. The five private workspace tarballs were packed locally. In a separate consumer, the official CLI installed and updated the skill in an isolated `--skill-root`; this exercised the managed receipt and hashes, but did not update an existing global installation. No previous CineWeb3D installation was found in the inspected home skill and npm locations of this environment; this does not establish the state of another machine.
+
+The CLI's `create` command generated the unmodified coffee scaffold outside the checkout. Installing a copied core tarball and building that consumer succeeded; its npm audit reported zero vulnerabilities. Vite warned that the Three.js chunk exceeded 500 kB. This establishes a local scaffold build, not browser operation, full independence of every workflow, or the requested perfume experience. No signed provenance was verified for these locally packed files.
+
+A new Codex CLI session using the isolated skill root failed with HTTP 401 and token refresh failure, despite `codex login status` reporting configured ChatGPT login. The skill was not confirmed as recognized or activated. Use the account owner's official sign-in flow and repeat `docs/skill-session-check.md`; never copy credentials into reports. The perfume project, real browser navigation, performance, accessibility, SEO and security validation remain pending.
+
+At the last check, [portable platform CI](https://github.com/ShalemKingdom/CineWeb3D/actions/runs/45853060948) for the reference commit had passed Linux and Windows but macOS was still queued. Inspect the current run before claiming a macOS result. Repository-only advanced capabilities include the director planner, audit/release checks, asset validation and optimization, Blender and AI pipelines; the private runtime and CLI do not bundle these. Physical devices and production hosting also require separate validation.
+
 No package is published. Node >=22.12 and npm are required. Review the repository and locks, run its release/security/audit checks, then run `node scripts/package-portable.mjs` and `npm pack ./reports/portable/package --pack-destination ./reports/portable`. Transfer the resulting tgz to a separate directory. It is a local artifact, not a registry package or production release.
 
 In an otherwise empty directory, `npm init -y` and `npm install --ignore-scripts /absolute/path/to/cineweb3d-runtime-0.6.0-alpha.9.tgz`. The installed executable offers:

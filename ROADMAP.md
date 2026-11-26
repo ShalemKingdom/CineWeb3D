@@ -1,4 +1,6 @@
 # Roadmap / Plan
+
+Step 14.4.3 remains in progress: the five local workspace packages were packed and an isolated managed skill install/update and independent scaffold build were exercised on Linux. Authenticated skill activation, the perfume experience and its browser, performance, accessibility, SEO and security checks remain open; the macOS CI job was queued at the last observation. See `docs/portable-installation.md` for the scope and evidence.
 - v0.3.0: permissive animation core.
 - v0.4.0: SEO, performance, accessibility, quality gates, Astro template (experimental).
 - v0.5.0: optional Blender Bridge (experimental; real Blender validation pending).

@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased — Step 14.4.3 partial validation
+- Packed the five private workspaces at reference commit `9e75f14` and exercised the official skill installer and updater in an isolated skill root. A fresh Codex session failed authentication (HTTP 401); activation was not verified.
+- Created and compiled the unmodified scaffold outside the checkout with a copied local core tarball; npm audit reported zero vulnerabilities. The requested perfume site and browser checks remain pending. No npm packages were published.
+
 ## Unreleased — Steps 10–14 (sandbox)
 - Step 10: strict license/SBOM and audit checks, FSL-free tested Lighthouse override, distribution notices and decoder provenance; Blender export and optimized model browser smoke validated.
 - Step 11: separate indexable SEO fixture, noindex previews, strict Lighthouse budgets and mobile intent-based automatic 3D.
