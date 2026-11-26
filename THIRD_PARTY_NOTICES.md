@@ -12,3 +12,6 @@ Root runtime (resolved versions): Three.js 0.181.2 (MIT), Anime.js 4.5.0 (MIT), 
 
 ## Step 10: license policy and evidence
 The Security & License Shield records package declarations, CycloneDX SBOMs and installed LICENSE/NOTICE texts (where present). FSL sentry@0.50.0 is an exact sandbox-only development exception, prohibited by the stable gate. Tooling MPL/LGPL terms require notices and separate distribution review. See docs/security-license-shield.md. No blanket MIT claim for third-party files.
+
+## Step 10 follow-up: FSL removed and distribution notices
+The earlier Sentry exception is historical. Root Lighthouse CI 0.16.1 now resolves Lighthouse 13.5.0 (exact override), whose tested dependency graph contains no FSL. Strict license checks and all three Lighthouse runs passed in candidate run 45726358606. Generated static output includes licenses/NOTICE.json, actual package LICENSE/NOTICE files, project MIT, Draco Apache-2.0 and meshoptimizer 0.22 MIT; decoder bytes checked against Three.js r181 hashes. Both builds also generate bundled-dependencies.json via Vite to identify actual bundled code; see docs/distribution-review.md. These notices cover current reviewed builds, not new media, model weights, separately installed tools or unreviewed native distributions.

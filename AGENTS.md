@@ -27,3 +27,5 @@ Optimization step 8: read docs/optimization-step-8.md and docs/ai-director-multi
 Optimization step 9: read docs/optimization-step-9.md. Generate/review all three lockfiles, run release:check and npm ci; never bypass CI or publish stable with blocked checks. Review exact licenses and npm audit; preserve noindex preview and do not claim real browser/GPU performance without evidence.
 
 Step 10: read docs/security-license-shield.md. Run security:check and strict security:stable before stable releases. Do not bypass blocked licenses, audit failures, or integrity checks. Preserve original license evidence and review final bundle and decoder notices; no redistribution of restricted development tooling.
+
+Step 10 follow-up: FSL is blocked in sandbox and stable. Preserve tested Lighthouse 13.5.0 override until an official FSL-free compatible release is validated. Generate and inspect actual distribution license reports and decoder checks via both builds; see docs/distribution-review.md.

@@ -35,6 +35,13 @@ export async function distributionNotices(base=root,kind='vite'){
  for(const name of ['three','animejs','lenis','web-vitals'])packages.push(await packageNotice(base,'.',name,output));
  if(kind==='vite')packages.push(await packageNotice(base,'.','vite',output));
  else for(const name of ['astro','tailwindcss','vite'])packages.push(await packageNotice(base,'templates/coffee-astro',name,output));
+ const bundleLicenses=await readJson(join(output,'bundled-dependencies.json'));
+ if(!Array.isArray(bundleLicenses)||!bundleLicenses.length)throw Error('Missing actual bundled dependency inventory');
+ const allowed=new Set(['MIT','Apache-2.0','BSD-2-Clause','BSD-3-Clause','ISC','0BSD','Zlib','BlueOak-1.0.0','PSF-2.0','CC0-1.0','(MIT OR CC0-1.0)']);
+ for(const item of bundleLicenses){
+  if(!item.name||!item.version||!allowed.has(item.identifier))throw Error('Unreviewed bundled dependency: '+JSON.stringify({name:item.name,version:item.version,license:item.identifier}));
+  if(!packages.some(p=>p.name===item.name&&p.version===item.version)&&!(typeof item.text==='string'&&item.text.trim()))throw Error('Missing bundled dependency license text: '+item.name);
+ }
  const files=await walk(dist),byHash=new Map();
  for(const f of files){if(f.startsWith(output+'/'))continue;const bytes=await readFile(f);const h=gitBlobHash(bytes);const list=byHash.get(h)||[];list.push(relative(dist,f));byHash.set(h,list);}
  const decoders=[];
@@ -47,7 +54,7 @@ export async function distributionNotices(base=root,kind='vite'){
  }
  for(const name of ['meshoptimizer-0.22-MIT.txt','draco-Apache-2.0.txt'])await writeFile(join(output,name),await readFile(join(base,'licenses',name)));
  await writeFile(join(output,'CineWeb3D-MIT.txt'),await readFile(join(base,'LICENSE')));
- const notice={distribution:kind,packages,decoders,notes:['Three.js r181 shipped decoder bytes verified by upstream git blob hashes. Draco glTF builds track its glTF extension branch; exact Draco release not established. Meshopt source header identifies version 0.22.','Astro/Tailwind/Vite notices are included conservatively, not a claim that every tool is shipped.','No node_modules, AI weights or native Sharp libraries are intended for distribution. Final bundle and media rights still require release review.']};
+ const notice={distribution:kind,packages,bundledDependencies:bundleLicenses.map(({name,version,identifier})=>({name,version,identifier})),decoders,notes:['Three.js r181 shipped decoder bytes verified by upstream git blob hashes. Draco glTF builds track its glTF extension branch; exact Draco release not established. Meshopt source header identifies version 0.22.','Astro/Tailwind/Vite notices are included conservatively, not a claim that every tool is shipped.','No node_modules, AI weights or native Sharp libraries are intended for distribution. Final bundle and media rights still require release review.']};
  await writeFile(join(output,'NOTICE.json'),JSON.stringify(notice,null,2)+'\n');
  await writeFile(join(output,'README.txt'),'CineWeb3D third-party notices\nSee NOTICE.json for package versions, sources, decoder hashes and license filenames.\nDraco: https://github.com/google/draco (Apache-2.0); meshoptimizer 0.22: https://github.com/zeux/meshoptimizer (MIT).\n');
  const report=join(base,'reports','distribution-notices');await mkdir(report,{recursive:true});await writeFile(join(report,kind+'.json'),JSON.stringify(notice,null,2)+'\n');

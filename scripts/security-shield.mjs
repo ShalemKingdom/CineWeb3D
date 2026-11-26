@@ -12,7 +12,6 @@ export function classify(project,p,{stable=false}={}){
  if(permissive.has(p.license))return {status:'allowed',scope:runtime?'browser-runtime':'tooling'};
  if(!runtime&&p.license==='MPL-2.0'&&(/^(?:@axe-core\/playwright|axe-core|lightningcss(?:-[a-z0-9-]+)?)$/.test(p.name)))return {status:'notice-required',scope:'tooling'};
  if(!runtime&&nativeLicenses.has(p.license)&&/^@img\/sharp-(?:libvips-[a-z0-9-]+|wasm32|win32-[a-z0-9-]+)$/.test(p.name))return {status:'notice-required',scope:'tooling-native'};
- if(!stable&&project==='.'&&p.dev&&p.name==='sentry'&&p.version==='0.50.0'&&p.license==='FSL-1.1-Apache-2.0')return {status:'sandbox-exception',scope:'tooling',reason:'Lighthouse transitive dependency; no redistribution; remove or resolve before stable'};
  return {status:'blocked',scope:runtime?'browser-runtime':'tooling',reason:'Unapproved, restricted or missing license'};
 }
 export function safePackagePath(path){
