@@ -31,3 +31,5 @@ Step 10: read docs/security-license-shield.md. Run security:check and strict sec
 Step 10 follow-up: FSL is blocked in sandbox and stable. Preserve tested Lighthouse 13.5.0 override until an official FSL-free compatible release is validated. Generate and inspect actual distribution license reports and decoder checks via both builds; see docs/distribution-review.md.
 
 Step 11: read docs/seo-performance-shield.md. Preserve mobile intent-gated automatic 3D, explicit controls, noindex previews, matching robots/sitemaps and strict median Lighthouse gates. Never deploy the reserved .example fixture or claim field metrics/search rankings from lab results.
+
+Step 12: read docs/commercial-showcase.md. The Grounds concept is independent of its live website; preserve noindex, Spanish accessible controls, original asset provenance and scoped adaptive rendering. Do not invent commercial data or publish without approval.

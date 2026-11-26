@@ -55,3 +55,6 @@ Generate or check two original concept templates with `npm run components:genera
 
 ## AI Multimedia Engine / Multimedia IA
 Optional local orchestration: `npm run multimedia:check` and `npm run multimedia:run -- --help`. Wan TI2V-5B, ComfyUI API graph, Blender frames and user media routes; dry-run by default, explicit execution and review. See [step 8](docs/optimization-step-8.md) and [AI Director recipe](docs/ai-director-multimedia.md). Actual AI generation and Blender remain unverified locally.
+
+## Commercial Showcase / The Grounds
+Spanish concept at `/examples/the-grounds/`: scoped interactive coffee scene, original vector art, semantic commercial sections and noindex. See [step 12](docs/commercial-showcase.md). Not the official site; no live menu, orders or bookings.
