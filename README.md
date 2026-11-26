@@ -78,3 +78,5 @@ An unpublished, private local npm package can be assembled for sandbox evaluatio
 Step 14.4 is in progress: [distribution notes](docs/portable-installation.md) describe the local SHA-256 check and the proposed platform CI. A checksum is not signed provenance; framework adapters and cross-platform results are not yet complete.
 
 Experimental [private distribution workspaces](docs/portable-installation.md#private-workspace-experiment) separate core, CLI, skill, templates and tools; their registry scope and publication are not established.
+
+Sandbox 14.4.1: framework lifecycle adapters and the optional Vite Blender entry are described in [portable installation](docs/portable-installation.md). Physical-device profiling remains a separate [manual protocol](docs/physical-device-diagnostics.md).

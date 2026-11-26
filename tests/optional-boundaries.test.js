@@ -1,0 +1,2 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';import {readFile} from 'node:fs/promises';
+test('framework controller and core scene do not import the optional Blender adapter',async()=>{for(const file of ['src/main.js','src/modules/bootstrap-controller.js'])assert.doesNotMatch(await readFile(file,'utf8'),/import\([^)]*blender-model/);assert.match(await readFile('src/bootstrap.js','utf8'),/import\([^)]*blender-model/);});

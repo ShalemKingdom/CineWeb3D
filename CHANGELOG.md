@@ -85,3 +85,8 @@
 
 ### Sandbox recovery follow-up
 - Add an explicit `skill-recover` command for a single verified backup left by an interrupted update; conflicting or modified backups are refused.
+
+### Sandbox 14.4.1
+- Separate the optional Vite Blender loader from the framework controller and expose opt-in framework lifecycle adapters.
+- Add a documented protocol for physical-device measurements; no physical GPU result is claimed.
+- Serialize cooperating skill operations with a conservative lock; unresolved stale locks require manual inspection.

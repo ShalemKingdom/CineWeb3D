@@ -5,7 +5,7 @@ import {createScrollEngine} from './modules/scroll.js';
 import {cinematicPose} from './modules/cinematic.js';
 import {createQualityController,createRenderScheduler,effectivePixelRatio,renderBudget} from './modules/smart-render.js';
 
-export function mountScene(canvas,mode,onLost,onQuality=()=>{}){
+export function mountScene(canvas,mode,onLost,onQuality=()=>{},loadBlenderModel=null){
  const showcase=canvas.dataset.layout==='showcase', coffeeLab=canvas.hasAttribute('data-coffee-lab');
  const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:mode==='cinematic'}),scene=new THREE.Scene();
  const camera=new THREE.PerspectiveCamera(42,innerWidth/Math.max(1,innerHeight),.1,100);camera.position.set(0,2,7);camera.lookAt(0,0,0);
@@ -57,6 +57,6 @@ export function mountScene(canvas,mode,onLost,onQuality=()=>{}){
  applyQuality(controller.tier);visibility();
  canvas.dataset.model="procedural";
  const useBlender=!showcase&&new URLSearchParams(location.search).get('model')==='blender';
- if(useBlender)import('./modules/blender-model.js').then(m=>m.loadBlenderModel(undefined,{signal:modelRequest.signal})).then(model=>{if(disposed){model.dispose();return;}blenderModel=model;scene.add(model.root);cup.visible=false;canvas.dataset.model="blender";scheduler.reset();scheduler.request();}).catch(e=>{if(!disposed){diagnosticSession()?.issue('model');console.warn('Blender GLB unavailable; using procedural cup.',e);}});
+ if(useBlender&&loadBlenderModel)loadBlenderModel(undefined,{signal:modelRequest.signal}).then(model=>{if(disposed){model.dispose();return;}blenderModel=model;scene.add(model.root);cup.visible=false;canvas.dataset.model="blender";scheduler.reset();scheduler.request();}).catch(e=>{if(!disposed){diagnosticSession()?.issue('model');console.warn('Blender GLB unavailable; using procedural cup.',e);}});
  return {get tier(){return controller.tier;},destroy(){if(disposed)return;disposed=true;modelRequest.abort();scheduler.destroy();observer?.disconnect();for(const geometry of new Set(extras.map(m=>m.geometry)))geometry.dispose();for(const material of new Set(extras.map(m=>m.material)))material.dispose();blenderModel?.dispose();unsub();scroll.destroy();timeline.cancel();removeEventListener('resize',resize);document.removeEventListener('visibilitychange',visibility);canvas.removeEventListener('webglcontextlost',lost);for(const set of geometryCache.values())for(const g of set)g.dispose();geometryCache.clear();particleGeometry.dispose();particles.material.dispose();ceramic.dispose();coffeeMaterial.dispose();key.shadow.dispose();renderer.dispose();}};
 }

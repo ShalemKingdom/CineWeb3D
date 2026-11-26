@@ -23,7 +23,7 @@ Read [workflow](references/workflow.md) for the selected route only. Use semanti
 - Video: use existing Smart Video Engine with approved silent decorative media, manual load and static fallback.
 - Optional local AI/Blender: first inspect hardware and plan; require explicit approval before execution, tool installation or weights. Do not pretend mocked tests are real AI output.
 
-For client-side routed apps, mount the explicit @cineweb3d/core/controller and call its cleanup on unmount. Next.js Turbopack does not currently support the optional decoder imports; a tested webpack fixture is experimental, not a general-purpose adapter. Preserve demand-driven scroll/rendering, mobile intent gating, reduced motion, data saving, accessible controls and cleanup. No GSAP/ScrollTrigger, FSL, compulsory paid APIs, CDN or telemetry by default. Never bypass security/notice gates. Keep optional dependencies isolated.
+For client-side routed apps, use the explicit @cineweb3d/core/adapters entry for Vite, Astro or Next and call its cleanup on unmount. The optional Blender decoder is a separate Vite-specific entry; do not assume GLB decoding works in Next or load it unless explicitly needed. Preserve demand-driven scroll/rendering, mobile intent gating, reduced motion, data saving, accessible controls and cleanup. No GSAP/ScrollTrigger, FSL, compulsory paid APIs, CDN or telemetry by default. Never bypass security/notice gates. Keep optional dependencies isolated.
 
 ## 3. Verify
 

@@ -43,3 +43,5 @@ Step 14.3: read docs/portable-installation.md. Keep the package private and unpu
 Step 14.4: checksums do not authenticate provenance. Keep platform CI results distinct from configured jobs, and keep unexecuted tests, optional integrations and unpublished packages explicitly labeled. Do not assert a stable release or GPU performance without evidence.
 
 Step 14.4 workspace experiment: the five private packages in distribution must stay synchronized with reviewed source. Run node scripts/workspace-check.mjs and workspace tests, preserve the three existing release gates, and do not claim provenance verification before a real signed attestation is checked.
+
+Step 14.4.1: keep optional Blender decoder imports out of the framework-controller graph; preserve the explicit Vite loader and validate real GLB regression. Keep core and skill package copies synchronized. Treat cooperative installer locking as non-adversarial and never claim physical GPU or authenticated Codex session results without evidence.

@@ -30,3 +30,5 @@ Evaluate a versioned, unpublished runtime tarball and CLI, separately managed us
 SHA-256 checking and a cross-platform workflow are under test. Signed provenance, SBOM verification, reproducible consumer locks, safe framework-specific adapters and measured GPU/memory optimization remain open until independently validated.
 
 Five private workspaces and a provenance workflow are experimental; signed attestation verification, independently released version upgrades, cross-framework adapters and GPU measurements remain open until exercised.
+
+Step 14.4.1 sandbox adds explicit framework lifecycle adapters and separates the Vite-only Blender loader. Real-device GPU tests, optional GLB decoding in Next/Turbopack, hostile concurrent-write hardening, npm scope ownership and a new authenticated Codex session remain open.

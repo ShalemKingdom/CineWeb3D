@@ -1,2 +1,3 @@
 import {mountExperience} from './modules/bootstrap-controller.js';
-mountExperience();
+const loadBlenderModel=(...args)=>import('./modules/blender-model.js').then(m=>m.loadBlenderModel(...args));
+mountExperience({loadBlenderModel});
