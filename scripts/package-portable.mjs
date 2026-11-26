@@ -1,0 +1,12 @@
+import {cp,mkdir,readFile,rm,writeFile} from 'node:fs/promises';
+import {resolve,join} from 'node:path';
+const root=process.cwd(), out=resolve(root,'reports/portable/package');
+await rm(out,{recursive:true,force:true});await mkdir(out,{recursive:true});
+for(const [src,dst] of [['packages/portable/cli.mjs','cli.mjs'],['src','src'],['.agents/skills/cineweb3d','skill'],['LICENSE','LICENSE'],['THIRD_PARTY_NOTICES.md','THIRD_PARTY_NOTICES.md']])await cp(resolve(root,src),join(out,dst),{recursive:true});
+const template=join(out,'template');await mkdir(join(template,'public'),{recursive:true});await cp(resolve(root,'public'),join(template,'public'),{recursive:true});
+let html=await readFile(resolve(root,'examples/cafe-aurora/index.html'),'utf8');html=html.replace('<link rel="stylesheet" href="/src/style.css"><link rel="stylesheet" href="/src/grounds.css">','').replace('/src/bootstrap.js','/src.js');
+await writeFile(join(template,'index.html'),html);await writeFile(join(template,'src.js'),"import '@cineweb3d/runtime/style.css';\nimport '@cineweb3d/runtime/grounds.css';\nimport '@cineweb3d/runtime/bootstrap';\n");
+await writeFile(join(template,'vite.config.js'),"import {defineConfig} from 'vite';\nexport default defineConfig({build:{rollupOptions:{output:{manualChunks(id){if(id.includes('/node_modules/three/build/'))return 'three';}}}}});\n");
+await writeFile(join(template,'package.json'),JSON.stringify({name:'cineweb3d-demo',version:'0.0.0',private:true,type:'module',scripts:{dev:'vite',build:'vite build',preview:'vite preview'},devDependencies:{vite:'7.3.8'}},null,2)+'\n');
+const manifest={name:'@cineweb3d/runtime',version:'0.6.0-alpha.9',private:true,type:'module',license:'MIT',description:'Experimental unpublished CineWeb3D runtime and CLI',engines:{node:'>=22.12.0'},bin:{cineweb3d:'./cli.mjs'},exports:{'./bootstrap':'./src/bootstrap.js','./style.css':'./src/style.css','./grounds.css':'./src/grounds.css','./main':'./src/main.js','./modules/*':'./src/modules/*'},dependencies:{three:'0.181.2',animejs:'4.5.0',lenis:'1.3.28','web-vitals':'5.1.0'}};
+await writeFile(join(out,'package.json'),JSON.stringify(manifest,null,2)+'\n');console.log(out);

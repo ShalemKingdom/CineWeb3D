@@ -22,3 +22,6 @@
 - v0.10.0: experimental visual Studio.
 - v1.0.0: stable only after security, licenses, accessibility and device checks.
 See docs/architecture.md. No npm package published.
+
+## Step 14.3 — Experimental portability
+Evaluate a versioned, unpublished runtime tarball and CLI, separately managed user skill, no-overwrite project scaffolding, and an independent consumer build. Registry publication, cross-platform installer hardening, full advanced toolchain distribution, and production release remain future work subject to evidence and review.

@@ -1,0 +1,12 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {mkdtemp,readFile,writeFile,mkdir,rm} from 'node:fs/promises';
+import {tmpdir} from 'node:os';
+import {join,resolve} from 'node:path';
+import {spawnSync} from 'node:child_process';
+const cli=resolve('packages/portable/cli.mjs');
+const run=(cwd,...args)=>spawnSync(process.execPath,[cli,...args],{cwd,encoding:'utf8'});
+test('skill install is idempotent and refuses to overwrite user edits or delete them',async()=>{const dir=await mkdtemp(join(tmpdir(),'cine-skill-'));try{const root=join(dir,'skills');let r=run(dir,'skill-install','--skill-root',root);assert.equal(r.status,0,r.stderr);r=run(dir,'skill-install','--skill-root',root);assert.equal(r.status,0,r.stderr);const file=join(root,'cineweb3d','SKILL.md');await writeFile(file,'user edit');r=run(dir,'skill-update','--skill-root',root);assert.notEqual(r.status,0);assert.equal(await readFile(file,'utf8'),'user edit');r=run(dir,'skill-uninstall','--skill-root',root);assert.notEqual(r.status,0);assert.equal(await readFile(file,'utf8'),'user edit');}finally{await rm(dir,{recursive:true,force:true})}});
+test('project scaffolding refuses to overwrite existing files',async()=>{const dir=await mkdtemp(join(tmpdir(),'cine-project-'));try{await mkdir(join(dir,'project'));await writeFile(join(dir,'project','index.html'),'keep');const r=run(dir,'create',join(dir,'project'));assert.notEqual(r.status,0);assert.equal(await readFile(join(dir,'project','index.html'),'utf8'),'keep');}finally{await rm(dir,{recursive:true,force:true})}});
+test('packaged CLI creates a project in an empty directory',async()=>{const dir=await mkdtemp(join(tmpdir(),'cine-empty-'));try{const built=spawnSync(process.execPath,[resolve('scripts/package-portable.mjs')],{encoding:'utf8'});assert.equal(built.status,0,built.stderr);const packaged=resolve('reports/portable/package/cli.mjs');const r=spawnSync(process.execPath,[packaged,'create',join(dir,'site')],{cwd:dir,encoding:'utf8'});assert.equal(r.status,0,r.stderr);assert.match(await readFile(join(dir,'site','index.html'),'utf8'),/Café Aurora/);}finally{await rm(dir,{recursive:true,force:true})}});
+test('doctor checks the local Node runtime and required modules',()=>{const r=run(process.cwd(),'doctor');assert.equal(r.status,0,r.stderr);const result=JSON.parse(r.stdout);assert.equal(result.checks.node,true);for(const name of ['three','animejs','lenis'])assert.equal(result.checks.dependencies[name],true);});

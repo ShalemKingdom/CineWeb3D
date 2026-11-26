@@ -70,3 +70,7 @@ Open the repository root in Codex and invoke `$cineweb3d` or explicitly ask the 
 [Contributing](CONTRIBUTING.md) · [Code of conduct](CODE_OF_CONDUCT.md) · [Security](SECURITY.md) · [Changelog](CHANGELOG.md) · [Release readiness](docs/release-readiness.md) · [Repository protection proposals](docs/repository-protection.md)
 
 The repository is public, but no stable release is published. Contributions should target sandbox until the first approved release. Do not redistribute third-party assets or tools without reviewing their licenses.
+
+### Experimental portable package (step 14.3)
+
+An unpublished, private local npm package can be assembled for sandbox evaluation; see [portable installation](docs/portable-installation.md). It separates the browser runtime and CLI from the user skill. It is not a published npm release and the checkout-only planner, Blender/AI tools and release gates are not included. The Café Aurora example is a fictional noindex demo.
