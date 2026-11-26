@@ -32,6 +32,7 @@ jobs:
           npm sbom --prefix templates/coffee-astro --package-lock-only --include=dev --include=optional --sbom-format=cyclonedx > reports/sbom-144/astro.cdx.json
           npm sbom --prefix tools/assets --package-lock-only --include=dev --include=optional --sbom-format=cyclonedx > reports/sbom-144/assets.cdx.json
           npm sbom --prefix distribution --package-lock-only --include=dev --include=optional --sbom-format=cyclonedx > reports/sbom-144/workspaces.cdx.json
+      - run: node scripts/check-sbom-coverage.mjs
       - name: Generate checksums
         run: sha256sum reports/workspaces/*.tgz > reports/workspaces/SHA256SUMS
       - name: Attest artifact provenance
