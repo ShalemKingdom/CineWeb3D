@@ -1,6 +1,7 @@
 import {readFile,writeFile,rm} from 'node:fs/promises';
 import {buildSeo,escapeHtml,sitemapXml,robotsText,jsonLd} from '../src/modules/seo.js';
 const seo=buildSeo({siteUrl:process.env.SITE_URL,indexable:process.env.SITE_INDEXABLE==='true'});
+if(process.env.SITE_INDEXABLE==='true'&&!seo.canonical)throw Error('Indexable build requires SITE_URL');
 const tags=[`<meta name="robots" content="${seo.robots}">`];
 if(seo.canonical){tags.push(`<link rel="canonical" href="${escapeHtml(seo.canonical)}">`,`<meta property="og:url" content="${escapeHtml(seo.canonical)}">`);tags.push(`<script type="application/ld+json">${jsonLd({'@context':'https://schema.org','@type':'WebPage',name:seo.title,description:seo.description,url:seo.canonical})}</script>`);}
 // Social preview image is opt-in: provide a real, public, share-compatible raster asset.

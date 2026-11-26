@@ -1,6 +1,6 @@
 /** Public metadata. Never invent a business, rating, or canonical domain. */
 export function escapeHtml(value){return String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-export function siteOrigin(value){if(!value)return null;const u=new URL(value);if(u.protocol!=='https:'||u.username||u.password||u.search||u.hash||u.pathname!=='/'||['localhost','127.0.0.1'].includes(u.hostname))throw new Error('SITE_URL must be a public HTTPS origin without a path');return u.origin;}
+export function siteOrigin(value){if(!value)return null;const u=new URL(value);if(u.protocol!=='https:'||u.username||u.password||u.search||u.hash||u.pathname!=='/'||!u.hostname.includes('.')||u.hostname.endsWith('.localhost')||u.hostname.endsWith('.local')||u.hostname.endsWith('.')||/^\d+(?:\.\d+){3}$/.test(u.hostname)||u.hostname.includes(':'))throw new Error('SITE_URL must be a public HTTPS origin without a path');return u.origin;}
 export function buildSeo({siteUrl,title='CineWeb3D | Cinematic coffee demo',description='Explore an accessible, scroll-driven 3D coffee experience built with CineWeb3D.',path='/',indexable=false,locale='en',image='/coffee-poster.svg'}={}){
  const origin=siteOrigin(siteUrl);if(!path.startsWith('/')||path.startsWith('//')||/[?#\\]/.test(path))throw new Error('Invalid route path');
  const canonical=origin?new URL(path,origin).href:null;return {title,description,canonical,robots:indexable&&canonical?'index,follow':'noindex,follow',locale,image:origin?new URL(image,origin).href:null};

@@ -14,7 +14,7 @@
     "quality": "lhci autorun",
     "images:optimize": "node scripts/optimize-images.mjs",
     "dev:astro": "npm --prefix templates/coffee-astro run dev",
-    "build:astro": "npm --prefix templates/coffee-astro run build && node scripts/distribution-notices.mjs astro",
+    "build:astro": "npm --prefix templates/coffee-astro run build && node scripts/build-astro-seo.mjs && node scripts/distribution-notices.mjs astro",
     "blender:check": "python3 scripts/blender_bridge.py --dry-run",
     "blender:build": "python3 scripts/blender_bridge.py",
     "blender:publish": "node scripts/smart-assets.mjs publish",
@@ -35,7 +35,9 @@
     "test:python": "python3 -m unittest discover -s tests -p 'test_*.py'",
     "validate:local": "npm test && npm run test:python && npm run components:check && npm run diagnostics:assets -- public --strict",
     "security:check": "node scripts/security-shield.mjs",
-    "security:stable": "node scripts/security-shield.mjs --stable"
+    "security:stable": "node scripts/security-shield.mjs --stable",
+    "seo:check": "node scripts/seo-shield.mjs",
+    "quality:production": "lhci autorun --config=lighthouserc.production.cjs"
   },
   "dependencies": {
     "animejs": "^4.2.0",

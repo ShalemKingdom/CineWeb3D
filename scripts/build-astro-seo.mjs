@@ -1,0 +1,12 @@
+import {readFile,writeFile,rm} from 'node:fs/promises';
+import {buildSeo,robotsText,sitemapXml,escapeHtml} from '../src/modules/seo.js';
+const seo=buildSeo({siteUrl:process.env.SITE_URL,indexable:process.env.SITE_INDEXABLE==='true'});
+if(process.env.SITE_INDEXABLE==='true'&&!seo.canonical)throw Error('Indexable build requires SITE_URL');
+const dir='templates/coffee-astro/dist';
+const html=await readFile(dir+'/index.html','utf8');
+if(!html.includes('content="'+seo.robots+'"'))throw Error('Astro robots metadata mismatch');
+if(seo.canonical&&!html.includes('href="'+escapeHtml(seo.canonical)+'"'))throw Error('Astro canonical mismatch');
+await writeFile(dir+'/robots.txt',robotsText(seo));
+if(seo.robots==='index,follow')await writeFile(dir+'/sitemap.xml',sitemapXml([seo.canonical]));
+else await rm(dir+'/sitemap.xml',{force:true});
+console.log('Astro SEO:',seo.robots,seo.canonical??'(no public domain configured)');

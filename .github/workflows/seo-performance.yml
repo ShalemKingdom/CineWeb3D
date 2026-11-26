@@ -1,0 +1,55 @@
+name: SEO and Performance Shield
+on:
+  push:
+    branches: [sandbox]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+      - run: npm run security:stable
+      - run: npm audit --package-lock-only --audit-level=low
+      - run: npm --prefix templates/coffee-astro audit --package-lock-only --audit-level=low
+      - run: npm ci --no-audit
+      - run: npm --prefix templates/coffee-astro ci --no-audit
+      - run: npx playwright install --with-deps chromium
+      - name: Validate safe preview builds
+        run: |
+          npm run build
+          npm run build:astro
+          npm run seo:check
+      - name: Validate indexable fixture locally, never deploy it
+        env:
+          SITE_URL: https://cineweb3d.example
+          SITE_INDEXABLE: "true"
+          CHROME_PATH: /usr/bin/google-chrome
+        run: |
+          npm run build
+          npm run build:astro
+          npm run seo:check
+          npm run quality:production
+      - name: Restore safe preview artifacts
+        if: always()
+        run: |
+          unset SITE_URL SITE_INDEXABLE SOCIAL_IMAGE_URL
+          npm run build
+          npm run build:astro
+          npm run seo:check
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: seo-performance-evidence
+          path: |
+            reports/seo-shield/
+            reports/lighthouse-production/
+          retention-days: 14
