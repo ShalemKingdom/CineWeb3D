@@ -80,3 +80,5 @@ Step 14.4 is in progress: [distribution notes](docs/portable-installation.md) de
 Experimental [private distribution workspaces](docs/portable-installation.md#private-workspace-experiment) separate core, CLI, skill, templates and tools; their registry scope and publication are not established.
 
 Sandbox 14.4.1: framework lifecycle adapters and the optional Vite Blender entry are described in [portable installation](docs/portable-installation.md). Physical-device profiling remains a separate [manual protocol](docs/physical-device-diagnostics.md).
+
+Sandbox 14.4.2 adds an opt-in portable GLB/Draco loader for Next/Turbopack and local decoder verification. See [installation and namespace instructions](docs/portable-installation.md#optional-glb-and-draco-in-nextturbopack); npm scope ownership still requires the project owner.

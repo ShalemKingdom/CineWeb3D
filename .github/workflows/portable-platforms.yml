@@ -35,7 +35,7 @@ jobs:
       - run: npm ci --ignore-scripts
       - run: npm audit --prefix distribution --package-lock-only --audit-level=low
       - run: npm ci --prefix distribution --ignore-scripts
-      - run: node --test tests/portable.test.js tests/portable-integrity.test.js tests/workspaces.test.js
+      - run: node --test tests/portable.test.js tests/portable-integrity.test.js tests/workspaces.test.js tests/integration/portable-glb.test.js
       - run: npm run test:upgrade
         env:
           CINE_ALLOW_NETWORK: '1'

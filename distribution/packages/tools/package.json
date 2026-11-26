@@ -11,6 +11,10 @@
     "./integrity": "./integrity.mjs"
   },
   "bin": {
-    "cineweb3d-integrity": "./integrity.mjs"
+    "cineweb3d-integrity": "./integrity.mjs",
+    "cineweb3d-decoder-assets": "./decoder-assets.mjs"
+  },
+  "dependencies": {
+    "three": "0.181.2"
   }
 }

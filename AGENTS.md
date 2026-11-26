@@ -45,3 +45,5 @@ Step 14.4: checksums do not authenticate provenance. Keep platform CI results di
 Step 14.4 workspace experiment: the five private packages in distribution must stay synchronized with reviewed source. Run node scripts/workspace-check.mjs and workspace tests, preserve the three existing release gates, and do not claim provenance verification before a real signed attestation is checked.
 
 Step 14.4.1: keep optional Blender decoder imports out of the framework-controller graph; preserve the explicit Vite loader and validate real GLB regression. Keep core and skill package copies synchronized. Treat cooperative installer locking as non-adversarial and never claim physical GPU or authenticated Codex session results without evidence.
+
+Step 14.4.2: keep the portable GLB loader and hash-checked optional decoder installer separate from procedural initialization. Preserve the Vite loader, source/package synchronization and decoder license notices. Validate real Draco on each claimed framework without weakening CSP or enabling CDN access by default.

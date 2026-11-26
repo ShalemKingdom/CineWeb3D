@@ -90,3 +90,10 @@
 - Separate the optional Vite Blender loader from the framework controller and expose opt-in framework lifecycle adapters.
 - Add a documented protocol for physical-device measurements; no physical GPU result is claimed.
 - Serialize cooperating skill operations with a conservative lock; unresolved stale locks require manual inspection.
+
+### Sandbox 14.4.2
+- Add an opt-in same-origin portable GLB/Draco loader for Next/Turbopack and a hash-verifying local decoder asset installer; procedural scenes do not import this loader.
+
+### Sandbox 14.4.2
+- Add a portable opt-in GLB loader with same-origin Draco assets and a hash-verified local decoder installer; retain the existing Vite-specific loader.
+- Exercise a real Draco GLB in Next.js with Turbopack and webpack, including client navigation, decoder failure and unmount during decoding.

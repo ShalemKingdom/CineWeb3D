@@ -17,7 +17,8 @@
     "./blender-vite": "./src/modules/blender-model.js",
     "./adapters/vite": "./src/adapters/vite.js",
     "./adapters/astro": "./src/adapters/astro.js",
-    "./adapters/next": "./src/adapters/next.js"
+    "./adapters/next": "./src/adapters/next.js",
+    "./blender-portable": "./src/modules/blender-model-portable.js"
   },
   "dependencies": {
     "three": "0.181.2",

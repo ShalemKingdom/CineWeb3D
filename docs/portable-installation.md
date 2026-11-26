@@ -36,13 +36,13 @@ The checksum protects against accidental changes only when the manifest is obtai
 
 Run `node scripts/workspace-check.mjs`, `npm audit --prefix distribution --package-lock-only --audit-level=low`, then `npm ci --prefix distribution --ignore-scripts`. Pack locally from `distribution` with `npm pack --workspaces --ignore-scripts --pack-destination ../reports/workspaces`. Test with local tarballs; because none is published, a consumer must provide all needed tarballs to npm. `tests/workspaces.test.js` detects drift between packaged core/skill and the repository and tests a local synthetic upgrade and rollback of skill files. A separate `npm run test:upgrade` builds two synthetic local tarball sets, installs and updates them through npm, simulates a backup interruption, recovers, rolls back and uninstalls. They are test fixtures, not independently released versions; actual cross-release migration and all crash windows remain unverified.
 
-The provenance workflow creates checksums, SBOMs, and requests GitHub's signed build attestations for the five tarballs. Verify an artifact with `gh attestation verify ARTIFACT --repo ShalemKingdom/CineWeb3D` after obtaining it and its attestation from GitHub. A configured workflow is not evidence of a successful or verified attestation; inspect the actual run. CycloneDX SBOMs include development dependencies as enumerated by npm on the runner; compare against lockfiles for platform-specific optional packages. A Vite demonstration and framework lifecycle adapters exist; full application integration and optional GLB decoding in Next remain unverified.
+The provenance workflow creates checksums, SBOMs, and requests GitHub's signed build attestations for the five tarballs. Verify an artifact with `gh attestation verify ARTIFACT --repo ShalemKingdom/CineWeb3D` after obtaining it and its attestation from GitHub. A configured workflow is not evidence of a successful or verified attestation; inspect the actual run. CycloneDX SBOMs include development dependencies as enumerated by npm on the runner; compare against lockfiles for platform-specific optional packages. Vite and Next framework fixtures were exercised; full application integration and other GLB asset classes require separate validation.
 
 `node scripts/check-sbom-coverage.mjs` compares CycloneDX component references with every versioned entry in the four lockfiles, including development and optional dependencies. Duplicate lock paths may represent the same component. This coverage check is not a validation of external tools, operating-system packages, media rights or dependency relationships.
 
 ### Framework lifecycle evidence
 
-For a client-routed page, `@cineweb3d/core/controller` exports `mountExperience()`, returning an idempotent cleanup function. Invoke it after the page DOM exists and call cleanup when it unmounts. A local Next.js 16.4.6 App Router fixture using this cleanup compiled under webpack and Turbopack and restored the procedural 3D scene after client navigation away and back. Separating the optional decoder loader from the controller removed the previous Turbopack compilation error. This is not proof of optional GLB decoder compatibility in Next.
+For a client-routed page, `@cineweb3d/core/controller` exports `mountExperience()`, returning an idempotent cleanup function. Invoke it after the page DOM exists and call cleanup when it unmounts. A local Next.js 16.4.6 App Router fixture using this cleanup compiled under webpack and Turbopack and restored the procedural 3D scene after client navigation away and back. Separating the optional decoder loader from the controller removed the previous Turbopack compilation error. A separate fixture subsequently tested one validated Draco-compressed GLB with both Turbopack and webpack, including navigation and failed-decoder fallback. This does not validate every GLB, extension, CSP or hosting configuration.
 
 A separate Astro 7.4.13 static page using the local core tarball compiled and its desktop/mobile browser smoke checks passed; dynamic view transitions and automatic integration into existing projects remain unverified. Vite standalone tarball use has also been tested. No framework configuration or application files are modified automatically.
 
@@ -70,7 +70,7 @@ The local upgrade test defaults to npm offline mode. On a clean CI runner, `CINE
 
 The core provides `@cineweb3d/core/adapters/vite`, `/astro`, and `/next`. Invoke the respective mount function after the DOM exists; call the returned cleanup at teardown. The Astro adapter also cleans up on `astro:before-swap`; mount it again after a subsequent page load. The Next adapter belongs in a client component effect, with its return value used as the effect cleanup. These are explicit integration APIs and do not modify project files.
 
-The framework adapters do not automatically import the optional Blender loader. Vite users can explicitly import `loadBlenderModel` from `@cineweb3d/core/blender-vite` and pass it as `loadBlenderModel` to the adapter. The original Vite showcase opts in automatically. Next/Turbopack procedural scenes work without that loader; GLB/Draco through Turbopack has not been validated and should not be claimed as supported. Astro and Next applications should use their own CSP and same-origin asset rules. See `docs/physical-device-diagnostics.md` for real-device measurement.
+The framework adapters do not automatically import the optional Blender loader. Vite users can explicitly import `loadBlenderModel` from `@cineweb3d/core/blender-vite` and pass it as `loadBlenderModel` to the adapter. The original Vite showcase opts in automatically. Next/Turbopack can opt in to the distinct portable loader described below. Astro and Next applications should use their own CSP and same-origin asset rules. See `docs/physical-device-diagnostics.md` for real-device measurement.
 
 Skill install, update, uninstall and recovery now use an atomic `.cineweb3d-lock` directory to serialize cooperating CLI processes. An existing lock causes a safe refusal. If a process terminates abruptly, inspect the installation and backup state and ensure no operation is running before manually removing a stale empty lock. The lock does not prevent a separate hostile process from modifying files or symlinks; it is not a security boundary against an adversarial local user. Recovery still refuses ambiguous, modified or unowned backups.
 
@@ -82,4 +82,58 @@ For local authentication, run `npm login --registry=https://registry.npmjs.org/`
 
 Official references: https://docs.npmjs.com/creating-an-organization/ ; https://docs.npmjs.com/configuring-two-factor-authentication/ ; https://docs.npmjs.com/about-organization-scopes-and-packages/ ; https://docs.npmjs.com/policies/disputes/ .
 
-Scope ownership remains unverified until the owner completes these steps. Optional GLB decoding under Turbopack also remains an open validation gate; procedural compatibility is not proof of Draco support.
+Scope ownership remains unverified until the owner completes these steps. One local Draco GLB has been exercised under Turbopack; broader asset, browser and production-hosting validation remains open.
+
+### Optional GLB and Draco in Next/Turbopack
+
+For a reviewed, self-contained GLB, install the private experimental `@cineweb3d/core` and `@cineweb3d/tools` tarballs from the same reviewed build. From the application root, create the parent directory `public/cineweb3d`, then run:
+
+```sh
+node node_modules/@cineweb3d/tools/decoder-assets.mjs public/cineweb3d/draco
+```
+
+The command requires Three.js 0.181.2, checks the SHA-256 of the three upstream Draco files, includes the Apache-2.0 notice and refuses an existing destination. A failure while writing may leave a partial new directory; review and remove it manually before retrying. Set your host's headers and content security policy deliberately; Draco workers may require same-origin decoder access, `blob:` workers and WebAssembly execution. Do not copy private inputs into `public`.
+
+In a Next client component, explicitly opt in and return cleanup from the React effect:
+
+```jsx
+'use client';
+import {useEffect} from 'react';
+import {mountNextExperience} from '@cineweb3d/core/adapters/next';
+const loadBlenderModel = (...args) =>
+  import('@cineweb3d/core/blender-portable').then(m => m.loadBlenderModel(...args));
+export function SceneLifecycle() {
+  useEffect(() => mountNextExperience({loadBlenderModel}), []);
+  return null;
+}
+```
+
+Place an approved GLB at `public/models/coffee.glb` for the default URL and use the existing `?model=blender` demo opt-in. If an application uses a non-root base path, supply an explicit same-origin model URL and decoder directory when calling `loadBlenderModel`. The procedural controller does not import the optional loader. The model parser rejects external GLB resources and the decoder path must be same-origin. The repository's asset validation and optimization tools remain optional and should be run on the trusted input before use. Test the app's own CSP, base path, browser and GLB extensions; no decoder binaries, Blender or AI tool is downloaded at runtime.
+
+#### Reproduce the isolated Next/Draco check
+
+With the reviewed repository dependencies and optional Blender/asset toolchain already installed, generate and validate a local model without rendering frames. Use fresh output paths; these commands do not publish the resulting GLB:
+
+```sh
+npm run blender:check
+npm run blender:build
+npm run assets:optimize -- generated/blender/coffee/scene.glb /tmp/cine-coffee-draco.glb --profile balanced --codec draco --max-mib 2
+mkdir -p reports/workspaces
+(cd distribution && npm pack --workspaces --pack-destination ../reports/workspaces --ignore-scripts)
+node scripts/prepare-next-glb-fixture.mjs /tmp/cine-next-glb-fixture
+```
+
+The fixture generator refuses an existing target and does not install dependencies. In the fixture directory, generate a lockfile for its pinned Next/React versions and the two reviewed local tarballs, audit it, then install without lifecycle scripts. Replace `/PATH/TO/REPO` with the actual checkout location:
+
+```sh
+cd /tmp/cine-next-glb-fixture
+npm install --package-lock-only --ignore-scripts /PATH/TO/REPO/reports/workspaces/cineweb3d-core-0.6.0-alpha.9.tgz /PATH/TO/REPO/reports/workspaces/cineweb3d-tools-0.6.0-alpha.9.tgz
+npm audit --package-lock-only --audit-level=low
+npm ci --ignore-scripts
+node node_modules/@cineweb3d/tools/decoder-assets.mjs public/cineweb3d/draco
+cp /tmp/cine-coffee-draco.glb public/models/coffee.glb
+NEXT_TELEMETRY_DISABLED=1 npx next build --turbopack
+NEXT_TELEMETRY_DISABLED=1 npx next start --hostname 127.0.0.1 --port 4185
+```
+
+In a second terminal at the checkout root, run `CINE_NEXT_URL=http://127.0.0.1:4185/ node scripts/test-next-glb.mjs`. It checks a real Draco decode, procedural request isolation, navigation, observed WebGL buffer deletion, decoder failure fallback and unmount during an in-flight decoder request. Repeat with `next build --webpack` after stopping the server. Chromium and Playwright must be installed separately. This is a local lab check; physical devices and other GLB extensions remain separate tests.
