@@ -74,3 +74,5 @@ The repository is public, but no stable release is published. Contributions shou
 ### Experimental portable package (step 14.3)
 
 An unpublished, private local npm package can be assembled for sandbox evaluation; see [portable installation](docs/portable-installation.md). It separates the browser runtime and CLI from the user skill. It is not a published npm release and the checkout-only planner, Blender/AI tools and release gates are not included. The Café Aurora example is a fictional noindex demo.
+
+Step 14.4 is in progress: [distribution notes](docs/portable-installation.md) describe the local SHA-256 check and the proposed platform CI. A checksum is not signed provenance; framework adapters and cross-platform results are not yet complete.

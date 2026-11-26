@@ -72,3 +72,8 @@
 - Adaptive visual modes, lazy 3D, original SVG fallback, reduced motion, disposal and keyboard navigation.
 - Optional Astro/Tailwind template, Sharp script, opt-in Web Vitals, conversion helper, Playwright/axe and Lighthouse configuration.
 - Catalog expanded to 36 upstream repositories. Actual installation, build and browser validation pending.
+
+## Unreleased — sandbox 14.4
+- Preserve the Café Aurora concept and experimental portable runtime work in separate commits.
+- Add SHA-256 artifact verification and a proposed Linux/Windows/macOS installer CI matrix; checksums alone are not signed provenance.
+- No npm publication, stable release, or main merge. Platform CI results and full distribution hardening remain to be verified.

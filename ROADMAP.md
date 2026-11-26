@@ -25,3 +25,6 @@ See docs/architecture.md. No npm package published.
 
 ## Step 14.3 — Experimental portability
 Evaluate a versioned, unpublished runtime tarball and CLI, separately managed user skill, no-overwrite project scaffolding, and an independent consumer build. Registry publication, cross-platform installer hardening, full advanced toolchain distribution, and production release remain future work subject to evidence and review.
+
+## Step 14.4 — Distribution hardening (in progress)
+SHA-256 checking and a cross-platform workflow are under test. Signed provenance, SBOM verification, reproducible consumer locks, safe framework-specific adapters and measured GPU/memory optimization remain open until independently validated.

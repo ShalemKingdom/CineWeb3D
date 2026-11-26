@@ -18,3 +18,14 @@ The current private tarball is a staging vehicle, not a completed multi-package 
 For a future release, evaluate separately versioned packages for the runtime, CLI/scaffolds, skill bundle and optional GLB/video/Blender/AI tooling. A single tarball is easier to install and test while APIs are experimental, but couples their versions and does not meet that modular release architecture. Publishing separate packages would require an explicit compatibility matrix, locked build graphs, verified provenance and notices, upgrade/migration tests, and registry namespace ownership. No public registry names or release dates are promised.
 
 `integrate` currently copies an isolated example into a child directory; it does not wire routing, build configuration, or styles into an existing app. Run its build and browser tests, then integrate modules manually. The Three.js chunk remains above 500 kB uncompressed. Its loading is deferred, but an actual reduction below that threshold remains open. The installer is not a hardened multi-user security boundary; concurrent operations, process interruption, hostile replacement of the receipt, Windows and macOS need further review and tests. A manually installed skill has no managed receipt and is intentionally not overwritten.
+
+## Integrity and proposed platform CI
+
+Generate and check an independent checksum file after packing:
+
+```sh
+node scripts/portable-integrity.mjs create reports/portable/cineweb3d-runtime-0.6.0-alpha.9.tgz reports/portable/checksums.json
+node scripts/portable-integrity.mjs verify reports/portable/cineweb3d-runtime-0.6.0-alpha.9.tgz reports/portable/checksums.json
+```
+
+The checksum protects against accidental changes only when the manifest is obtained through a separately trusted channel. It is not a signature, a software bill of materials, or a provenance attestation. The platform workflow proposes Linux, Windows and macOS checks; the workflow is not evidence that any particular run succeeded. Generate an SBOM from the consumer's actual lockfile and independently verify provenance before distribution.

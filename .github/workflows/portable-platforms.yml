@@ -1,0 +1,46 @@
+name: Portable installer platform checks
+on:
+  push:
+    branches: ['sandbox-distribution-*']
+  pull_request:
+    paths:
+      - 'packages/portable/**'
+      - 'scripts/package-portable.mjs'
+      - 'scripts/portable-integrity.mjs'
+      - 'tests/portable*.test.js'
+      - '.github/workflows/portable-platforms.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  portable:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm run release:check
+      - run: npm run security:stable
+      - run: npm audit --package-lock-only --audit-level=low
+      - run: npm ci --ignore-scripts
+      - run: node --test tests/portable.test.js tests/portable-integrity.test.js
+      - run: node scripts/package-portable.mjs
+      - run: npm pack ./reports/portable/package --pack-destination ./reports/portable --ignore-scripts
+      - run: node scripts/portable-integrity.mjs create reports/portable/cineweb3d-runtime-0.6.0-alpha.9.tgz reports/portable/checksums.json
+      - run: node scripts/portable-integrity.mjs verify reports/portable/cineweb3d-runtime-0.6.0-alpha.9.tgz reports/portable/checksums.json
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: portable-check-${{ matrix.os }}
+          path: |
+            reports/portable/*.tgz
+            reports/portable/checksums.json
+          retention-days: 14
