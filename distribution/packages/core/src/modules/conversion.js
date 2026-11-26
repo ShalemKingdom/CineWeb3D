@@ -1,0 +1,1 @@
+export function whatsappLink(phone,message=''){if(!/^\+?[1-9]\d{7,14}$/.test(phone))throw Error('Use a real international phone number');return `https://wa.me/${phone.replace(/^\+/,'')}${message?'?text='+encodeURIComponent(message):''}`;}

@@ -77,3 +77,8 @@
 - Preserve the Café Aurora concept and experimental portable runtime work in separate commits.
 - Add SHA-256 artifact verification and a proposed Linux/Windows/macOS installer CI matrix; checksums alone are not signed provenance.
 - No npm publication, stable release, or main merge. Platform CI results and full distribution hardening remain to be verified.
+
+### Sandbox workspace experiment
+- Add five private, versioned npm workspaces, with separate package exports and a distribution lockfile.
+- Add tests for package contents, workspace integrity, and synthetic skill upgrade/rollback; add a workflow for SBOMs and artifact attestations.
+- Astro/Next adapters, independently published packages, GPU optimization and verified signed provenance remain unfinished.

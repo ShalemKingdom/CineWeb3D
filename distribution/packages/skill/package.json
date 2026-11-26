@@ -1,0 +1,14 @@
+{
+  "name": "@cineweb3d/skill",
+  "version": "0.6.0-alpha.9",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "exports": {
+    "./package.json": "./package.json",
+    "./SKILL.md": "./SKILL.md"
+  }
+}

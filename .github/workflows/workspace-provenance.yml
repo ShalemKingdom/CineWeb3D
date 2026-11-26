@@ -1,0 +1,55 @@
+name: Private workspace artifacts and provenance
+on:
+  push:
+    branches: ['sandbox-distribution-*']
+  workflow_dispatch:
+permissions:
+  contents: read
+  id-token: write
+  attestations: write
+jobs:
+  artifacts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+      - run: npm run release:check && npm run security:stable
+      - run: node scripts/workspace-check.mjs
+      - run: npm audit --prefix distribution --package-lock-only --audit-level=low
+      - run: npm ci --prefix distribution --ignore-scripts
+      - run: node --test tests/workspaces.test.js
+      - run: mkdir -p reports/workspaces reports/sbom-144
+      - run: npm pack --workspaces --pack-destination ../reports/workspaces --ignore-scripts
+        working-directory: distribution
+      - name: Generate SBOMs including dev and build dependencies
+        run: |
+          npm sbom --package-lock-only --include=dev --include=optional --sbom-format=cyclonedx > reports/sbom-144/root.cdx.json
+          npm sbom --prefix templates/coffee-astro --package-lock-only --include=dev --include=optional --sbom-format=cyclonedx > reports/sbom-144/astro.cdx.json
+          npm sbom --prefix tools/assets --package-lock-only --include=dev --include=optional --sbom-format=cyclonedx > reports/sbom-144/assets.cdx.json
+          npm sbom --prefix distribution --package-lock-only --include=dev --include=optional --sbom-format=cyclonedx > reports/sbom-144/workspaces.cdx.json
+      - name: Generate checksums
+        run: sha256sum reports/workspaces/*.tgz > reports/workspaces/SHA256SUMS
+      - name: Attest artifact provenance
+        uses: actions/attest-build-provenance@977bb373ede98d70efdf65b84cb5f73e068dcc2a
+        with:
+          subject-path: 'reports/workspaces/*.tgz'
+      - name: Verify signed provenance
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for artifact in reports/workspaces/*.tgz; do
+            gh attestation verify "$artifact" --repo "$GITHUB_REPOSITORY"
+          done
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: private-workspaces-with-sbom
+          path: |
+            reports/workspaces/*.tgz
+            reports/workspaces/SHA256SUMS
+            reports/sbom-144/*.cdx.json
+          retention-days: 14

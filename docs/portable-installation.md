@@ -29,3 +29,11 @@ node scripts/portable-integrity.mjs verify reports/portable/cineweb3d-runtime-0.
 ```
 
 The checksum protects against accidental changes only when the manifest is obtained through a separately trusted channel. It is not a signature, a software bill of materials, or a provenance attestation. The platform workflow proposes Linux, Windows and macOS checks; the workflow is not evidence that any particular run succeeded. Generate an SBOM from the consumer's actual lockfile and independently verify provenance before distribution.
+
+## Private workspace experiment
+
+`distribution/` contains five private npm workspaces at `0.6.0-alpha.9`. The core owns the browser runtime; CLI owns the installer and demo scaffolding; skill owns its manifest and references; templates owns the Aurora template; tools owns checksum tooling. The CLI depends on skill and templates; templates depends on core. Core pins Three.js, Anime.js, Lenis and web-vitals. Their packages are local alpha artifacts, not npm registry releases.
+
+Run `node scripts/workspace-check.mjs`, `npm audit --prefix distribution --package-lock-only --audit-level=low`, then `npm ci --prefix distribution --ignore-scripts`. Pack locally from `distribution` with `npm pack --workspaces --ignore-scripts --pack-destination ../reports/workspaces`. Test with local tarballs; because none is published, a consumer must provide all needed tarballs to npm. `tests/workspaces.test.js` detects drift between packaged core/skill and the repository and tests a local synthetic upgrade and rollback of skill files. Updating actual npm packages between independently released versions and crash recovery remain unverified.
+
+The provenance workflow creates checksums, SBOMs, and requests GitHub's signed build attestations for the five tarballs. Verify an artifact with `gh attestation verify ARTIFACT --repo ShalemKingdom/CineWeb3D` after obtaining it and its attestation from GitHub. A configured workflow is not evidence of a successful or verified attestation; inspect the actual run. CycloneDX SBOMs include development dependencies as enumerated by npm on the runner; compare against lockfiles for platform-specific optional packages. Existing Vite demonstration works from the local package. Secure Astro/Next adapters and full application integration are not implemented.

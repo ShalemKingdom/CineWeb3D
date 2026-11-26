@@ -28,3 +28,5 @@ Evaluate a versioned, unpublished runtime tarball and CLI, separately managed us
 
 ## Step 14.4 — Distribution hardening (in progress)
 SHA-256 checking and a cross-platform workflow are under test. Signed provenance, SBOM verification, reproducible consumer locks, safe framework-specific adapters and measured GPU/memory optimization remain open until independently validated.
+
+Five private workspaces and a provenance workflow are experimental; signed attestation verification, independently released version upgrades, cross-framework adapters and GPU measurements remain open until exercised.
