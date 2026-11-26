@@ -33,11 +33,13 @@
     "test:multimedia": "python3 -m unittest discover -s tests -p test_ai_multimedia.py",
     "release:check": "node scripts/release-check.mjs",
     "test:python": "python3 -m unittest discover -s tests -p 'test_*.py'",
-    "validate:local": "npm test && npm run test:python && npm run components:check && npm run diagnostics:assets -- public --strict",
+    "validate:local": "npm test && npm run test:python && npm run components:check && npm run diagnostics:assets -- public --strict && npm run director:check",
     "security:check": "node scripts/security-shield.mjs",
     "security:stable": "node scripts/security-shield.mjs --stable",
     "seo:check": "node scripts/seo-shield.mjs",
-    "quality:production": "lhci autorun --config=lighthouserc.production.cjs"
+    "quality:production": "lhci autorun --config=lighthouserc.production.cjs",
+    "director:plan": "node scripts/director-plan.mjs",
+    "director:check": "node scripts/check-skill.mjs"
   },
   "dependencies": {
     "animejs": "^4.2.0",

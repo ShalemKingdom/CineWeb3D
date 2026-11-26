@@ -58,3 +58,6 @@ Optional local orchestration: `npm run multimedia:check` and `npm run multimedia
 
 ## Commercial Showcase / The Grounds
 Spanish concept at `/examples/the-grounds/`: scoped interactive coffee scene, original vector art, semantic commercial sections and noindex. See [step 12](docs/commercial-showcase.md). Not the official site; no live menu, orders or bookings.
+
+## AI Skill Engineering / Step 13
+Open the repository root in Codex and invoke `$cineweb3d` or explicitly ask the agent to read `.agents/skills/cineweb3d/SKILL.md`. Use `npm run director:plan -- templates/director/coffee-brief.json` for a deterministic plan (not a site generator). See [AI Skill Engineering](docs/ai-skill-engineering.md) for the workflow, checks and limitations.

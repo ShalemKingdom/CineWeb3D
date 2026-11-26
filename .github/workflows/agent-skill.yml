@@ -1,0 +1,30 @@
+name: AI Skill Engineering
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  skill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+      - run: npm run director:check
+      - run: node --test tests/director-plan.test.js
+      - name: Generate reproducible sample plans
+        run: |
+          mkdir -p reports/director
+          node scripts/director-plan.mjs templates/director/coffee-brief.json > reports/director/coffee.json
+          node scripts/director-plan.mjs templates/director/product-brief.json > reports/director/product.json
+          node -e "const a=require('./reports/director/coffee.json'),b=require('./reports/director/product.json');if(a.route!=='coffee-procedural'||b.route!=='static'||a.executionAuthorized||b.executionAuthorized)process.exit(1)"
+      - run: npm run security:stable
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: agent-skill-evidence
+          path: reports/director/
+          retention-days: 14
