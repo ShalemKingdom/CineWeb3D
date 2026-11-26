@@ -13,3 +13,9 @@ __pycache__/
 public/models/coffee.glb
 
 public/media/
+
+# Private local inputs and drafts (review before publishing)
+inputs/
+private-briefs/
+*.pem
+*.key

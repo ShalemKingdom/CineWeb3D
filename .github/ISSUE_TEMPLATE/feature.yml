@@ -1,0 +1,25 @@
+name: Feature request / Propuesta
+description: Propose an improvement to CineWeb3D.
+title: "[Feature]: "
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: User need and goal
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed experience or solution
+    validations:
+      required: true
+  - type: textarea
+    id: impact
+    attributes:
+      label: Performance, accessibility, security and license impact
+      description: Mention alternatives and optional dependencies; avoid mandatory paid services.
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria and tests

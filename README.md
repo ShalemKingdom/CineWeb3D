@@ -1,22 +1,26 @@
-# CineWeb3D v0.6.0-alpha.9 — Integral validation, step 9 (experimental)
+# CineWeb3D — Cinematic 3D websites
+
+**v0.6.0-alpha.9 · Experimental · Development: sandbox**
+
+[![Build and quality](https://github.com/ShalemKingdom/CineWeb3D/actions/workflows/ci.yml/badge.svg?branch=sandbox)](https://github.com/ShalemKingdom/CineWeb3D/actions/workflows/ci.yml) [![Security and License Shield](https://github.com/ShalemKingdom/CineWeb3D/actions/workflows/security-shield.yml/badge.svg?branch=sandbox)](https://github.com/ShalemKingdom/CineWeb3D/actions/workflows/security-shield.yml) [MIT (original code)](LICENSE)
 Build spectacular cinematic websites. / Crea webs 3D cinematográficas.
 
 By ShalemKingdom. Original code MIT. No mandatory paid APIs or subscriptions; hardware, electricity and hosting may cost money.
 
 ## Start / Inicio
-Node 22.12+, npm; Python 3 for optional media tools.
+Clone the development branch (main does not yet contain the engine). Node 22.23.4+ recommended for the full suite; Python 3/FFmpeg are separate for media tests.
 ```sh
-npm install
-npm test
+git clone --branch sandbox https://github.com/ShalemKingdom/CineWeb3D.git
+cd CineWeb3D
+npm run setup
+npm run setup -- --install
 npm run dev
-npm run build
-npm run preview
-npm run doctor
 ```
-Before release, follow [step 9 / release checklist](docs/optimization-step-9.md). Generate and review all three lockfiles; CI fails if missing. Optional Astro/Tailwind template (Node 22.23.4+ for Astro 7): `npm --prefix templates/coffee-astro install` then `npm run dev:astro` or `npm run build:astro` (root install also required). Demo is noindex unless configured with an actual public domain and explicit opt-in. See [SEO & performance](docs/seo-performance.md).
+Open the local URL printed by Vite. Try `/examples/the-grounds/` for the commercial concept. For Astro and asset tools use `npm run setup -- --install --all`; then follow [contributor validation](docs/contributor-validation.md). The default setup only prints a plan; installation requires explicit opt-in.
+Before release, follow [step 9 / release checklist](docs/optimization-step-9.md). All three exact lockfiles are committed; do not regenerate them without review. CI fails if missing. Optional Astro/Tailwind template (Node 22.23.4+ for Astro 7): `npm --prefix templates/coffee-astro install` then `npm run dev:astro` or `npm run build:astro` (root install also required). Demo is noindex unless configured with an actual public domain and explicit opt-in. See [SEO & performance](docs/seo-performance.md).
 
 ## Status / Estado
-Experimental source: Three.js coffee scene, Anime.js, Lenis, timeline and video scroll helper retained; semantic HTML, SEO generator, responsive CSS, four visual modes, static SVG alternative, opt-in metrics and quality tooling added. The Astro template and browser tooling are configured but require installation and execution. Advanced modules remain optional or planned. No models or binaries included. GSAP not included.
+Experimental source: Three.js coffee scene, Anime.js, Lenis, timeline and video scroll helper retained; semantic HTML, SEO generator, responsive CSS, four visual modes, static SVG alternative, opt-in metrics and quality tooling added. Vite/Astro and desktop/mobile Chromium have passed sandbox CI; physical device and field testing remain separate. Advanced modules remain optional or planned. No external model weights or tools bundled; reviewed decoder assets and license notices are generated with builds. GSAP not included.
 
 - [Integral validation / Release checklist](docs/optimization-step-9.md)
 - [AI Multimedia Engine](docs/optimization-step-8.md)
@@ -61,3 +65,8 @@ Spanish concept at `/examples/the-grounds/`: scoped interactive coffee scene, or
 
 ## AI Skill Engineering / Step 13
 Open the repository root in Codex and invoke `$cineweb3d` or explicitly ask the agent to read `.agents/skills/cineweb3d/SKILL.md`. Use `npm run director:plan -- templates/director/coffee-brief.json` for a deterministic plan (not a site generator). See [AI Skill Engineering](docs/ai-skill-engineering.md) for the workflow, checks and limitations.
+
+## Community / Comunidad
+[Contributing](CONTRIBUTING.md) · [Code of conduct](CODE_OF_CONDUCT.md) · [Security](SECURITY.md) · [Changelog](CHANGELOG.md) · [Release readiness](docs/release-readiness.md) · [Repository protection proposals](docs/repository-protection.md)
+
+The repository is public, but no stable release is published. Contributions should target sandbox until the first approved release. Do not redistribute third-party assets or tools without reviewing their licenses.

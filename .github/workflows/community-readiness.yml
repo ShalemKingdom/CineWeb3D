@@ -1,0 +1,22 @@
+name: Community Readiness
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  community:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+      - run: npm run community:check
+      - run: node --test tests/setup.test.js
+      - run: npm run setup
+      - name: Verify explicit onboarding installation
+        run: npm run setup -- --install --all
+      - run: npm run build
+      - run: npm run build:astro

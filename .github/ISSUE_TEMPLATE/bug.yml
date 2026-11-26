@@ -1,0 +1,38 @@
+name: Bug report / Error
+description: Report reproducible non-security bugs.
+title: "[Bug]: "
+body:
+  - type: markdown
+    attributes:
+      value: Do not post credentials, vulnerability details, private media or business data. See SECURITY.md for vulnerabilities.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened?
+      description: Expected and actual behavior; include reproducible steps.
+    validations:
+      required: true
+  - type: input
+    id: commit
+    attributes:
+      label: Commit or version
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment and checks
+      description: OS, Node/npm, browser/device, WebGL, reduced motion and relevant error logs (redacted).
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Minimal example or screenshot (optional)
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Confirm
+      options:
+        - label: I removed secrets, personal information and unauthorized assets.
+          required: true

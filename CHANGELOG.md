@@ -1,3 +1,12 @@
+# Changelog
+
+## Unreleased — Steps 10–14 (sandbox)
+- Step 10: strict license/SBOM and audit checks, FSL-free tested Lighthouse override, distribution notices and decoder provenance; Blender export and optimized model browser smoke validated.
+- Step 11: separate indexable SEO fixture, noindex previews, strict Lighthouse budgets and mobile intent-based automatic 3D.
+- Step 12: Spanish commercial showcase with scoped 3D, original illustrations and automated browser/Lighthouse evidence.
+- Step 13: repository-local mirrored skill, deterministic six-route brief planner and 11 passing regression tests.
+- Step 14: onboarding helper, contributor policy, community templates and proposed administrator rulesets. Settings are not activated by source files. No stable version, tag or release created.
+
 ## 0.6.0-alpha.9 — Integral validation
 - Strict release lockfile preflight and license inventory for all three npm projects; no silent CI install fallback.
 - Vite advisory check, loopback dev server defaults, read-only CI without persisted checkout credentials and security audits.

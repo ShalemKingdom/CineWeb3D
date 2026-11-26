@@ -12,6 +12,9 @@
 - v0.6.0-alpha.7: Smart Component Engine, two commercial concept templates, three themes, static generation; browser checks pending.
 - v0.6.0-alpha.8: optional AI Multimedia Engine, local Wan/ComfyUI adapters and Blender/user media pipeline; real AI generation pending.
 - v0.6.0-alpha.9: integral validation, strict lockfile/security gates, SEO integration tests; 145 tests pass locally, stable release blocked.
+- Steps 10–13: security/license shield, SEO/performance shield, commercial showcase and AI skill implemented in sandbox; CI evidence documented. Step 14: community readiness and proposed branch rules; administrator activation and final review pending.
+- Step 15: authorized community launch with an evidence-appropriate release label, after all relevant release gates.
+- Step 16: Studio exploration (not yet implemented).
 - v0.6.0: stable only after reproducible lockfiles, builds, browser, GPU, security and license gates.
 - v0.7.0: commercial templates and conversion adapters.
 - v0.8.0: AI Director and agent workflows.
