@@ -9,6 +9,7 @@
     "preview": "vite preview",
     "media:check": "python3 scripts/check_media.py",
     "test": "node --test tests/*.test.js",
+    "test:upgrade": "node scripts/test-local-upgrade.mjs",
     "doctor": "python3 scripts/check_media.py",
     "test:e2e": "playwright test",
     "quality": "lhci autorun",

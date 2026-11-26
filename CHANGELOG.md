@@ -82,3 +82,6 @@
 - Add five private, versioned npm workspaces, with separate package exports and a distribution lockfile.
 - Add tests for package contents, workspace integrity, and synthetic skill upgrade/rollback; add a workflow for SBOMs and artifact attestations.
 - Astro/Next adapters, independently published packages, GPU optimization and verified signed provenance remain unfinished.
+
+### Sandbox recovery follow-up
+- Add an explicit `skill-recover` command for a single verified backup left by an interrupted update; conflicting or modified backups are refused.
